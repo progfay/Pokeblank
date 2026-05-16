@@ -1,0 +1,22 @@
+{
+  "name": "pokeblank",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview",
+    "check": "vp check",
+    "test": "vp test",
+    "generate:pokedex": "vp node scripts/fetch-pokemon.ts"
+  },
+  "devDependencies": {
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
+    "@vitest/browser": "^3.2.0",
+    "playwright": "^1.52.0",
+    "svelte": "^5.28.0",
+    "vite-plus": "^0.1.21",
+    "vitest": "^3.2.0"
+  }
+}
