@@ -1,0 +1,39 @@
+:root {
+  --color-bg: #1a1a2e;
+  --color-surface: #16213e;
+  --color-primary: #e94560;
+  --color-text: #eaeaea;
+  --color-muted: #888;
+  --color-border: #333;
+  --radius: 8px;
+  --font-sans: system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 1rem;
+  min-height: 100dvh;
+}
+
+#app {
+  width: 100%;
+  max-width: 480px;
+}
