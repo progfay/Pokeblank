@@ -4,23 +4,23 @@
 
 ### 1.1 コア
 
-| 項目 | 採用技術 |
-|---|---|
-| フレームワーク | Svelte 5（Runes） |
-| 言語 | TypeScript |
-| ツールチェイン | Vite+ |
-| パッケージマネージャ | npm |
-| ホスティング | GitHub Pages |
-| CI/CD | GitHub Actions（デプロイのみ） |
+| 項目                 | 採用技術                       |
+| -------------------- | ------------------------------ |
+| フレームワーク       | Svelte 5（Runes）              |
+| 言語                 | TypeScript                     |
+| ツールチェイン       | Vite+                          |
+| パッケージマネージャ | npm                            |
+| ホスティング         | GitHub Pages                   |
+| CI/CD                | GitHub Actions（デプロイのみ） |
 
 ### 1.2 開発ツール
 
-| 項目 | 採用技術 |
-|---|---|
-| テストランナー | Vitest |
-| ブラウザテスト | Vitest Browser Mode（Playwright provider / Chromium のみ） |
+| 項目                      | 採用技術                                                    |
+| ------------------------- | ----------------------------------------------------------- |
+| テストランナー            | Vitest                                                      |
+| ブラウザテスト            | Vitest Browser Mode（Playwright provider / Chromium のみ）  |
 | Lint / Format / TypeCheck | Vite+ 同梱の Oxlint / Oxfmt / tsgo（`vp check` で一括実行） |
-| データ取得スクリプト実行 | Node.js Type Stripping |
+| データ取得スクリプト実行  | Node.js Type Stripping                                      |
 
 ### 1.3 CSS
 
@@ -131,7 +131,7 @@ minify 形式のタプル配列:
 相対パス指定、静的型定義:
 
 ```typescript
-declare module './pokedex.json' {
+declare module "./pokedex.json" {
   export type PokedexEntry = readonly [pokedexNumber: number, name: string];
   const pokedex: readonly PokedexEntry[];
   export default pokedex;
@@ -143,13 +143,13 @@ declare module './pokedex.json' {
 全ポケモン名から集めた特殊文字（ひらがな・カタカナ以外）の配列、Unicode コードポイント順:
 
 ```json
-["2",":","Z","♀","♂"]
+["2", ":", "Z", "♀", "♂"]
 ```
 
 #### 3.4.4 `src/data/special-chars.json.d.ts`
 
 ```typescript
-declare module './special-chars.json' {
+declare module "./special-chars.json" {
   const specialChars: readonly string[];
   export default specialChars;
 }
@@ -195,7 +195,7 @@ export type ValidatedInput = Normalized & { readonly [validatedBrand]: true };
 ```typescript
 // src/lib/quiz/question.ts
 export type Letter = {
-  readonly kind: 'masked' | 'revealed';
+  readonly kind: "masked" | "revealed";
   readonly value: string;
 };
 
@@ -205,8 +205,8 @@ export type Question = {
 
 // src/lib/quiz/answer.ts
 export type AnswerResult =
-  | { kind: 'correct'; matchedPokemon: PokedexEntry }
-  | { kind: 'incorrect' };
+  | { kind: "correct"; matchedPokemon: PokedexEntry }
+  | { kind: "incorrect" };
 ```
 
 ### 4.2 関数シグネチャ
@@ -221,7 +221,7 @@ export function normalize(raw: string): Normalized;
 // text/validation
 export function validate(
   normalized: Normalized,
-  allowedSpecialChars: readonly string[]
+  allowedSpecialChars: readonly string[],
 ): ValidatedInput | null;
 
 // text/special-chars
@@ -234,19 +234,16 @@ export function generateQuestion(entry: PokedexEntry): Question;
 export function withRevealed(question: Question, letterIndex: number): Question;
 
 // quiz/matching
-export function matchesPattern(
-  candidateGraphemes: readonly string[],
-  question: Question
-): boolean;
+export function matchesPattern(candidateGraphemes: readonly string[], question: Question): boolean;
 export function findAllMatchingPokedexEntries(
   pokedex: Pokedex,
-  question: Question
+  question: Question,
 ): readonly PokedexEntry[];
 
 // quiz/answer
 export function checkAnswer(
   input: ValidatedInput,
-  matchingEntries: readonly PokedexEntry[]
+  matchingEntries: readonly PokedexEntry[],
 ): AnswerResult;
 ```
 
@@ -304,15 +301,15 @@ App.svelte
 
 ### 5.3 各コンポーネントの責務
 
-| コンポーネント | 責務 |
-|---|---|
-| `App.svelte` | アプリ全体、画面モード切り替え、状態の集約 |
-| `QuestionView.svelte` | 出題画面のレイアウト、送信/パスボタン、letters の each 展開 |
-| `Letter.svelte` | 1 文字の表示。`revealed` は値を表示、`masked` は `◯` を表示し dblclick で親に通知 |
-| `InputField.svelte` | 入力欄。Enter で送信イベント発火 |
-| `SpecialKeyboard.svelte` | 全特殊文字を常時表示、ボタン押下で親に通知 |
-| `AnswerView.svelte` | 答え合わせ画面のレイアウト、次の問題ボタン |
-| `PokedexLink.svelte` | ポケモン名と公式図鑑へのアンカーリンク |
+| コンポーネント           | 責務                                                                              |
+| ------------------------ | --------------------------------------------------------------------------------- |
+| `App.svelte`             | アプリ全体、画面モード切り替え、状態の集約                                        |
+| `QuestionView.svelte`    | 出題画面のレイアウト、送信/パスボタン、letters の each 展開                       |
+| `Letter.svelte`          | 1 文字の表示。`revealed` は値を表示、`masked` は `◯` を表示し dblclick で親に通知 |
+| `InputField.svelte`      | 入力欄。Enter で送信イベント発火                                                  |
+| `SpecialKeyboard.svelte` | 全特殊文字を常時表示、ボタン押下で親に通知                                        |
+| `AnswerView.svelte`      | 答え合わせ画面のレイアウト、次の問題ボタン                                        |
+| `PokedexLink.svelte`     | ポケモン名と公式図鑑へのアンカーリンク                                            |
 
 ### 5.4 状態管理
 
@@ -328,14 +325,14 @@ App.svelte
 
 ### 5.5 イベントフロー
 
-| ユーザー操作 | 発火元 | 通知先 | App での処理 |
-|---|---|---|---|
-| 入力欄に文字を打つ | InputField | App | `rawInput` を更新 |
-| 特殊文字ボタンを押す | SpecialKeyboard | App | `rawInput` に追加 |
-| マスク文字をダブルクリック | Letter | App | `withRevealed(question, index)` で更新 |
-| 送信ボタン or Enter | QuestionView / InputField | App | normalize → validate → checkAnswer、モード切り替え |
-| パスボタン | QuestionView | App | matchingEntries を計算、モード切り替え |
-| 次の問題へ | AnswerView | App | 新規問題生成、モード切り替え |
+| ユーザー操作               | 発火元                    | 通知先 | App での処理                                       |
+| -------------------------- | ------------------------- | ------ | -------------------------------------------------- |
+| 入力欄に文字を打つ         | InputField                | App    | `rawInput` を更新                                  |
+| 特殊文字ボタンを押す       | SpecialKeyboard           | App    | `rawInput` に追加                                  |
+| マスク文字をダブルクリック | Letter                    | App    | `withRevealed(question, index)` で更新             |
+| 送信ボタン or Enter        | QuestionView / InputField | App    | normalize → validate → checkAnswer、モード切り替え |
+| パスボタン                 | QuestionView              | App    | matchingEntries を計算、モード切り替え             |
+| 次の問題へ                 | AnswerView                | App    | 新規問題生成、モード切り替え                       |
 
 ### 5.6 ヒント機能
 
@@ -359,7 +356,7 @@ App.svelte
 `*.d.ts` でモジュール宣言を行う方式。
 
 ```typescript
-declare module './pokedex.json' {
+declare module "./pokedex.json" {
   // 型定義
 }
 ```

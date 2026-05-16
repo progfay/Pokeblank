@@ -1,7 +1,7 @@
-import { segment } from '../text/segment.ts';
+import { segment } from "../text/segment.ts";
 
 export type Letter = {
-  readonly kind: 'masked' | 'revealed';
+  readonly kind: "masked" | "revealed";
   readonly value: string;
 };
 
@@ -33,7 +33,7 @@ export function generateQuestion(entry: PokedexEntry): Question {
 
   return {
     letters: graphemes.map((value, i) => ({
-      kind: revealedSet.has(i) ? 'revealed' : 'masked',
+      kind: revealedSet.has(i) ? "revealed" : "masked",
       value,
     })),
   };
@@ -42,7 +42,7 @@ export function generateQuestion(entry: PokedexEntry): Question {
 export function withRevealed(question: Question, letterIndex: number): Question {
   return {
     letters: question.letters.map((letter, i) =>
-      i === letterIndex ? { ...letter, kind: 'revealed' } : letter
+      i === letterIndex ? { ...letter, kind: "revealed" } : letter,
     ),
   };
 }

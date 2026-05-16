@@ -1,63 +1,63 @@
-import { mount } from 'svelte';
-import { describe, expect, it, vi } from 'vitest';
-import Letter from './Letter.svelte';
+import { mount } from "svelte";
+import { describe, expect, it, vi } from "vitest";
+import Letter from "./Letter.svelte";
 
-describe('Letter', () => {
-  it('shows value when revealed', () => {
-    const div = document.createElement('div');
+describe("Letter", () => {
+  it("shows value when revealed", () => {
+    const div = document.createElement("div");
     document.body.appendChild(div);
     mount(Letter, {
       target: div,
-      props: { letter: { kind: 'revealed', value: 'ピ' }, index: 0, onreveal: vi.fn() },
+      props: { letter: { kind: "revealed", value: "ピ" }, index: 0, onreveal: vi.fn() },
     });
-    expect(div.textContent).toContain('ピ');
+    expect(div.textContent).toContain("ピ");
     div.remove();
   });
 
-  it('shows ◯ when masked', () => {
-    const div = document.createElement('div');
+  it("shows ◯ when masked", () => {
+    const div = document.createElement("div");
     document.body.appendChild(div);
     mount(Letter, {
       target: div,
-      props: { letter: { kind: 'masked', value: 'ピ' }, index: 0, onreveal: vi.fn() },
+      props: { letter: { kind: "masked", value: "ピ" }, index: 0, onreveal: vi.fn() },
     });
-    expect(div.textContent).toContain('◯');
+    expect(div.textContent).toContain("◯");
     div.remove();
   });
 
-  it('does not show value when masked', () => {
-    const div = document.createElement('div');
+  it("does not show value when masked", () => {
+    const div = document.createElement("div");
     document.body.appendChild(div);
     mount(Letter, {
       target: div,
-      props: { letter: { kind: 'masked', value: 'ピ' }, index: 0, onreveal: vi.fn() },
+      props: { letter: { kind: "masked", value: "ピ" }, index: 0, onreveal: vi.fn() },
     });
-    expect(div.textContent).not.toContain('ピ');
+    expect(div.textContent).not.toContain("ピ");
     div.remove();
   });
 
-  it('calls onreveal with index on dblclick', () => {
-    const div = document.createElement('div');
+  it("calls onreveal with index on dblclick", () => {
+    const div = document.createElement("div");
     document.body.appendChild(div);
     const onreveal = vi.fn();
     mount(Letter, {
       target: div,
-      props: { letter: { kind: 'masked', value: 'ピ' }, index: 3, onreveal },
+      props: { letter: { kind: "masked", value: "ピ" }, index: 3, onreveal },
     });
-    const btn = div.querySelector('button')!;
-    btn.dispatchEvent(new MouseEvent('dblclick', { bubbles: true }));
+    const btn = div.querySelector("button")!;
+    btn.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
     expect(onreveal).toHaveBeenCalledWith(3);
     div.remove();
   });
 
-  it('does not render button when revealed', () => {
-    const div = document.createElement('div');
+  it("does not render button when revealed", () => {
+    const div = document.createElement("div");
     document.body.appendChild(div);
     mount(Letter, {
       target: div,
-      props: { letter: { kind: 'revealed', value: 'ピ' }, index: 0, onreveal: vi.fn() },
+      props: { letter: { kind: "revealed", value: "ピ" }, index: 0, onreveal: vi.fn() },
     });
-    expect(div.querySelector('button')).toBeNull();
+    expect(div.querySelector("button")).toBeNull();
     div.remove();
   });
 });
