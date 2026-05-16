@@ -5,12 +5,12 @@ import { isSpecialChar } from '../src/lib/text/special-chars.ts';
 const ENDPOINT = 'https://graphql.pokeapi.co/v1beta2';
 
 const query = `{
-  pokemon_v2_pokemonspecies(
-    where: { pokemon_v2_pokemons: { is_default: { _eq: true } } }
+  pokemonspecies(
+    where: { pokemons: { is_default: { _eq: true } } }
     order_by: { id: asc }
   ) {
     id
-    pokemon_v2_pokemonspeciesnames(where: { language_id: { _eq: 1 } }) {
+    pokemonspeciesnames(where: { language_id: { _eq: 1 } }) {
       name
     }
   }
@@ -35,13 +35,13 @@ if (errors) {
 
 type Entry = [number, string];
 const pokedex: Entry[] = (
-  data.pokemon_v2_pokemonspecies as {
+  data.pokemonspecies as {
     id: number;
-    pokemon_v2_pokemonspeciesnames: { name: string }[];
+    pokemonspeciesnames: { name: string }[];
   }[]
 )
   .map(s => {
-    const nameEntry = s.pokemon_v2_pokemonspeciesnames[0];
+    const nameEntry = s.pokemonspeciesnames[0];
     return nameEntry ? ([s.id, nameEntry.name] as Entry) : null;
   })
   .filter((e): e is Entry => e !== null);

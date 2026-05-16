@@ -4,12 +4,12 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vp dev",
-    "build": "vp build",
-    "preview": "vp preview",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "check": "vp check",
-    "test": "vp test",
-    "generate:pokedex": "vp node scripts/fetch-pokemon.ts"
+    "test": "vitest",
+    "generate:pokedex": "node --experimental-strip-types scripts/fetch-pokemon.ts"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
