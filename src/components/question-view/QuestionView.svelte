@@ -2,11 +2,9 @@
   import type { Question } from '../../lib/quiz/question.ts';
   import InputField from './InputField.svelte';
   import Letter from './Letter.svelte';
-  import SpecialKeyboard from './SpecialKeyboard.svelte';
 
   interface Props {
     question: Question;
-    specialChars: readonly string[];
     rawInput: string;
     error: string | null;
     hintIndices: Set<number>;
@@ -18,7 +16,6 @@
 
   let {
     question,
-    specialChars,
     rawInput,
     error,
     hintIndices,
@@ -103,10 +100,6 @@
     </p>
   </div>
 
-  <SpecialKeyboard
-    chars={specialChars}
-    onpress={(char) => oninputchange(rawInput + char)}
-  />
 </main>
 
 <style>

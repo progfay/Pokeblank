@@ -10,8 +10,22 @@ describe("normalize", () => {
     expect(normalize("ピカチュウ")).toBe("ピカチュウ");
   });
 
-  it("leaves special chars unchanged", () => {
+  it("leaves ♀ and ♂ unchanged", () => {
     expect(normalize("ニドラン♀")).toBe("ニドラン♀");
+    expect(normalize("ニドラン♂")).toBe("ニドラン♂");
+  });
+
+  it("converts halfwidth digit to fullwidth", () => {
+    expect(normalize("ポリゴン2")).toBe("ポリゴン２");
+  });
+
+  it("converts halfwidth colon to fullwidth", () => {
+    expect(normalize("タイプ:ヌル")).toBe("タイプ：ヌル");
+  });
+
+  it("converts halfwidth ASCII letter to fullwidth uppercase", () => {
+    expect(normalize("ポリゴンZ")).toBe("ポリゴンＺ");
+    expect(normalize("ポリゴンz")).toBe("ポリゴンＺ");
   });
 
   it("handles mixed hiragana and katakana", () => {

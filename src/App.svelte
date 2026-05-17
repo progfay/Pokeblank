@@ -37,7 +37,6 @@
   {#if quiz.mode === 'question'}
     <QuestionView
       question={quiz.question}
-      {specialChars}
       rawInput={quiz.rawInput}
       error={quiz.error}
       hintIndices={quiz.hintIndices}
