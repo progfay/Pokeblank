@@ -15,6 +15,10 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
     return generateQuestion(pickRandomPokemon(pokedex));
   }
 
+  function resolveMatches() {
+    return findAllMatchingPokedexEntries(pokedex, question);
+  }
+
   let mode = $state<'question' | 'answer'>('question');
   let question = $state<Question>(newRound());
   let rawInput = $state('');
@@ -43,14 +47,14 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
         return;
       }
       error = null;
-      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
+      matchingEntries = resolveMatches();
       const result = checkAnswer(validated, matchingEntries);
       wasCorrect = result.kind === 'correct';
       mode = 'answer';
     },
 
     handlePass() {
-      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
+      matchingEntries = resolveMatches();
       wasCorrect = false;
       mode = 'answer';
     },
