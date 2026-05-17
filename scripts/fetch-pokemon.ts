@@ -33,14 +33,24 @@ if (errors) {
   process.exit(1);
 }
 
-const pokedex: string[] = (
+const entries = (
   data.pokemonspecies as {
     id: number;
     pokemonspeciesnames: { name: string }[];
   }[]
 )
-  .map((s) => s.pokemonspeciesnames[0]?.name ?? null)
-  .filter((name): name is string => name !== null);
+  .map((s) => ({ id: s.id, name: s.pokemonspeciesnames[0]?.name ?? null }))
+  .filter((e): e is { id: number; name: string } => e.name !== null)
+  .sort((a, b) => a.id - b.id);
+
+for (const [i, { id }] of entries.entries()) {
+  if (id !== i + 1) {
+    console.error(`id mismatch at index ${i}: expected ${i + 1}, got ${id}`);
+    process.exit(1);
+  }
+}
+
+const pokedex: string[] = entries.map(({ name }) => name);
 
 const specialCharsSet = new Set<string>();
 for (const name of pokedex) {
