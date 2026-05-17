@@ -4,19 +4,23 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview",
     "check": "vp check",
-    "test": "vitest",
+    "test": "vp test",
     "generate:pokedex": "node --experimental-strip-types scripts/fetch-pokemon.ts"
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@0.1.21",
+    "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.21"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "5.1.1",
     "@vitest/browser": "3.2.4",
+    "@vitest/browser-playwright": "4.1.5",
     "playwright": "1.60.0",
     "svelte": "5.55.7",
-    "vite-plus": "0.1.21",
-    "vitest": "3.2.4"
+    "vite-plus": "0.1.21"
   }
 }
