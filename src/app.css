@@ -56,6 +56,7 @@
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
   /* ---- Breakpoints ---- */
+  --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
 
   /* ---- Focus ---- */
@@ -160,7 +161,7 @@ body {
 /* Screen column — mobile-first, max 480px wide */
 .screen {
   width: 100%;
-  max-width: var(--breakpoint-md);
+  max-width: var(--breakpoint-sm);
   height: 100dvh;
   display: flex;
   flex-direction: column;
