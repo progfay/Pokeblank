@@ -6,10 +6,12 @@ import {
   type Question,
 } from '../quiz/question.ts';
 import { checkAnswer } from '../quiz/answer.ts';
-import { findAllMatchingPokedexEntries } from '../quiz/matching.ts';
+import { findAllMatchingPokedexEntries, segmentPokedex } from '../quiz/matching.ts';
 import { withRevealed } from '../quiz/question.ts';
 
 export function createQuizStore(pokedex: readonly PokedexEntry[]) {
+  const segmentedPokedex = segmentPokedex(pokedex);
+
   function newRound(): Question {
     return generateQuestion(pickRandomPokemon(pokedex));
   }
@@ -38,7 +40,7 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
 
     handleSubmit() {
       const normalized = normalize(rawInput);
-      const strictEntries = findAllMatchingPokedexEntries(pokedex, question, true);
+      const strictEntries = findAllMatchingPokedexEntries(segmentedPokedex, question, true);
       const result = checkAnswer(normalized, pokedex, strictEntries);
       if (result.kind === 'not-a-pokemon') {
         error = '未知のポケモンです';
@@ -49,14 +51,14 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
         return;
       }
       error = null;
-      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
+      matchingEntries = findAllMatchingPokedexEntries(segmentedPokedex, question);
       wasCorrect = true;
       matchedEntry = result.matchedPokemon;
       mode = 'answer';
     },
 
     handlePass() {
-      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
+      matchingEntries = findAllMatchingPokedexEntries(segmentedPokedex, question);
       wasCorrect = false;
       matchedEntry = null;
       mode = 'answer';

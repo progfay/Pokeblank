@@ -1,6 +1,15 @@
 import { segment } from "../text/segment.ts";
 import type { Pokedex, PokedexEntry, Question } from "./question.ts";
 
+export type SegmentedEntry = {
+  readonly entry: PokedexEntry;
+  readonly graphemes: readonly string[];
+};
+
+export function segmentPokedex(pokedex: Pokedex): readonly SegmentedEntry[] {
+  return pokedex.map((entry) => ({ entry, graphemes: segment(entry[1]) }));
+}
+
 export function matchesPattern(
   candidateGraphemes: readonly string[],
   question: Question,
@@ -16,9 +25,11 @@ export function matchesPattern(
 }
 
 export function findAllMatchingPokedexEntries(
-  pokedex: Pokedex,
+  segmentedPokedex: readonly SegmentedEntry[],
   question: Question,
   strict = false,
 ): readonly PokedexEntry[] {
-  return pokedex.filter((entry) => matchesPattern(segment(entry[1]), question, strict));
+  return segmentedPokedex
+    .filter(({ graphemes }) => matchesPattern(graphemes, question, strict))
+    .map(({ entry }) => entry);
 }
