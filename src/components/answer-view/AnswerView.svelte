@@ -76,7 +76,7 @@
     display: flex;
     flex-direction: column;
     padding: var(--space-5);
-    padding-bottom: calc(var(--space-4) + 44px + var(--space-3));
+    padding-bottom: calc(var(--space-4) + 44px + var(--space-3) + env(safe-area-inset-bottom, 0px));
     gap: var(--space-6);
     overflow: hidden;
   }
