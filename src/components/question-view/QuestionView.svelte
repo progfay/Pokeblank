@@ -37,18 +37,6 @@
   const canSubmit = $derived(rawInput.trim().length > 0);
 </script>
 
-<header class="topbar">
-  <span class="brand">Pokeblank</span>
-  <button class="btn btn-ghost btn-sm" onclick={onpass} aria-label="Skip">
-    <!-- Lucide skip-forward, stroke 1.5 -->
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="5 4 15 12 5 20 5 4"></polygon>
-      <line x1="19" y1="4" x2="19" y2="20"></line>
-    </svg>
-    <span>Skip</span>
-  </button>
-</header>
-
 <main class="stage">
   <div class="answer-zone field" data-state={error ? 'error' : undefined}>
     <div class="input-row">
@@ -101,6 +89,18 @@
     {/key}
   </div>
 </main>
+
+<header class="topbar">
+  <span class="brand">Pokeblank</span>
+  <button class="btn btn-ghost btn-sm" onclick={onpass} aria-label="Skip">
+    <!-- Lucide skip-forward, stroke 1.5 -->
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="5 4 15 12 5 20 5 4"></polygon>
+      <line x1="19" y1="4" x2="19" y2="20"></line>
+    </svg>
+    <span>Skip</span>
+  </button>
+</header>
 
 <style>
   .stage {
