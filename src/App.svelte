@@ -1,14 +1,12 @@
 <script lang="ts">
   import pokedexData from './data/pokedex.json';
-  import specialCharsData from './data/special-chars.json';
   import AnswerView from './components/answer-view/AnswerView.svelte';
   import QuestionView from './components/question-view/QuestionView.svelte';
   import { createQuizStore } from './lib/stores/quiz.svelte.ts';
   import type { PokedexEntry } from './lib/quiz/question.ts';
 
   const pokedex = pokedexData as readonly PokedexEntry[];
-  const specialChars = specialCharsData as readonly string[];
-  const quiz = createQuizStore(pokedex, specialChars);
+  const quiz = createQuizStore(pokedex);
 
   let vh = $state(
     typeof window !== 'undefined'

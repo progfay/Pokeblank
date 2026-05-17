@@ -1,4 +1,4 @@
-import type { ValidatedInput } from "../text/validation.ts";
+import type { Normalized } from "../text/normalize.ts";
 import type { PokedexEntry } from "./question.ts";
 
 export type AnswerResult =
@@ -7,7 +7,7 @@ export type AnswerResult =
   | { kind: "incorrect" };
 
 export function checkAnswer(
-  input: ValidatedInput,
+  input: Normalized,
   pokedex: readonly PokedexEntry[],
   matchingEntries: readonly PokedexEntry[],
 ): AnswerResult {

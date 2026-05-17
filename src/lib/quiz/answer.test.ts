@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { checkAnswer } from "./answer.ts";
-import type { ValidatedInput } from "../text/validation.ts";
+import type { Normalized } from "../text/normalize.ts";
 
-const asValidated = (s: string) => s as ValidatedInput;
+const asNormalized = (s: string) => s as Normalized;
 
 const ENTRIES = [
   [25, "ピカチュウ"],
@@ -16,7 +16,7 @@ const POKEDEX = [
 
 describe("checkAnswer", () => {
   it("returns correct when name matches first entry", () => {
-    const result = checkAnswer(asValidated("ピカチュウ"), POKEDEX, ENTRIES);
+    const result = checkAnswer(asNormalized("ピカチュウ"), POKEDEX, ENTRIES);
     expect(result.kind).toBe("correct");
     if (result.kind === "correct") {
       expect(result.matchedPokemon[0]).toBe(25);
@@ -24,7 +24,7 @@ describe("checkAnswer", () => {
   });
 
   it("returns correct when name matches second entry", () => {
-    const result = checkAnswer(asValidated("ライチュウ"), POKEDEX, ENTRIES);
+    const result = checkAnswer(asNormalized("ライチュウ"), POKEDEX, ENTRIES);
     expect(result.kind).toBe("correct");
     if (result.kind === "correct") {
       expect(result.matchedPokemon[0]).toBe(26);
@@ -32,17 +32,17 @@ describe("checkAnswer", () => {
   });
 
   it("returns incorrect when name exists in pokedex but not in matching entries", () => {
-    const result = checkAnswer(asValidated("フシギダネ"), POKEDEX, ENTRIES);
+    const result = checkAnswer(asNormalized("フシギダネ"), POKEDEX, ENTRIES);
     expect(result.kind).toBe("incorrect");
   });
 
   it("returns not-a-pokemon when name does not exist in pokedex", () => {
-    const result = checkAnswer(asValidated("ピカチューム"), POKEDEX, ENTRIES);
+    const result = checkAnswer(asNormalized("ピカチューム"), POKEDEX, ENTRIES);
     expect(result.kind).toBe("not-a-pokemon");
   });
 
   it("returns not-a-pokemon for empty pokedex", () => {
-    const result = checkAnswer(asValidated("ピカチュウ"), [], []);
+    const result = checkAnswer(asNormalized("ピカチュウ"), [], []);
     expect(result.kind).toBe("not-a-pokemon");
   });
 });

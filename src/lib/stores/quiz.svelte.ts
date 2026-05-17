@@ -1,5 +1,4 @@
 import { normalize } from '../text/normalize.ts';
-import { validate } from '../text/validation.ts';
 import {
   generateQuestion,
   pickRandomPokemon,
@@ -9,7 +8,7 @@ import {
 import { checkAnswer } from '../quiz/answer.ts';
 import { findAllMatchingPokedexEntries } from '../quiz/matching.ts';
 
-export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: readonly string[]) {
+export function createQuizStore(pokedex: readonly PokedexEntry[]) {
   function newRound(): Question {
     return generateQuestion(pickRandomPokemon(pokedex));
   }
@@ -40,13 +39,8 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
 
     handleSubmit() {
       const normalized = normalize(rawInput);
-      const validated = validate(normalized, specialChars);
-      if (validated === null) {
-        error = 'カタカナで入力してください';
-        return;
-      }
       matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
-      const result = checkAnswer(validated, pokedex, matchingEntries);
+      const result = checkAnswer(normalized, pokedex, matchingEntries);
       if (result.kind === 'not-a-pokemon') {
         error = '未知のポケモンです';
         return;
