@@ -6,7 +6,7 @@ import {
   type Question,
 } from '../quiz/question.ts';
 import { checkAnswer } from '../quiz/answer.ts';
-import { findAllMatchingPokedexEntries, findMatchingEntries, segmentPokedex } from '../quiz/matching.ts';
+import { findMatchingEntries, segmentPokedex } from '../quiz/matching.ts';
 import { withRevealed } from '../quiz/question.ts';
 
 export function createQuizStore(pokedex: readonly PokedexEntry[]) {
@@ -59,7 +59,7 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
     },
 
     handlePass() {
-      matchingEntries = findAllMatchingPokedexEntries(segmentedPokedex, question);
+      matchingEntries = findMatchingEntries(segmentedPokedex, question).all;
       wasCorrect = false;
       matchedEntry = null;
       mode = 'answer';

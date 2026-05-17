@@ -24,16 +24,6 @@ export function matchesPattern(
   });
 }
 
-export function findAllMatchingPokedexEntries(
-  segmentedPokedex: readonly SegmentedEntry[],
-  question: Question,
-  strict = false,
-): readonly PokedexEntry[] {
-  return segmentedPokedex
-    .filter(({ graphemes }) => matchesPattern(graphemes, question, strict))
-    .map(({ entry }) => entry);
-}
-
 export function findMatchingEntries(
   segmentedPokedex: readonly SegmentedEntry[],
   question: Question,
