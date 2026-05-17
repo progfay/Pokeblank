@@ -1,23 +1,19 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it } from "vitest";
 import { segment } from "../text/segment.ts";
 import { findAllMatchingPokedexEntries, matchesPattern } from "./matching.ts";
 import { generateQuestion } from "./question.ts";
-import { POKEDEX_FIXTURE } from "./test-fixtures.ts";
+import { POKEDEX_FIXTURE, withMockedRandom } from "./test-fixtures.ts";
 
 const POKEDEX = POKEDEX_FIXTURE;
 
 describe("matchesPattern", () => {
   it("source pokemon always matches its own question", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0);
-    const q = generateQuestion([25, "ピカチュウ"]);
-    vi.restoreAllMocks();
+    const q = withMockedRandom(0, () => generateQuestion([25, "ピカチュウ"]));
     expect(matchesPattern(segment("ピカチュウ"), q)).toBe(true);
   });
 
   it("returns false for different length", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0);
-    const q = generateQuestion([25, "ピカチュウ"]); // 5 chars
-    vi.restoreAllMocks();
+    const q = withMockedRandom(0, () => generateQuestion([25, "ピカチュウ"])); // 5 chars
     expect(matchesPattern(segment("ア"), q)).toBe(false);
     expect(matchesPattern(segment("アイウエオカ"), q)).toBe(false);
   });
@@ -37,17 +33,13 @@ describe("matchesPattern", () => {
 
 describe("findAllMatchingPokedexEntries", () => {
   it("always includes source pokemon", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0);
-    const q = generateQuestion([25, "ピカチュウ"]);
-    vi.restoreAllMocks();
+    const q = withMockedRandom(0, () => generateQuestion([25, "ピカチュウ"]));
     const matches = findAllMatchingPokedexEntries(POKEDEX, q);
     expect(matches.some(([id]) => id === 25)).toBe(true);
   });
 
   it("excludes pokemon with different length", () => {
-    vi.spyOn(Math, "random").mockReturnValue(0);
-    const q = generateQuestion([25, "ピカチュウ"]); // 5 chars
-    vi.restoreAllMocks();
+    const q = withMockedRandom(0, () => generateQuestion([25, "ピカチュウ"])); // 5 chars
     const matches = findAllMatchingPokedexEntries(POKEDEX, q);
     expect(matches.some(([id]) => id === 1)).toBe(false); // フシギダネ is 5 chars too but different
   });
