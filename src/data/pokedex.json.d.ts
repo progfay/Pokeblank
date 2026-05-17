@@ -1,5 +1,4 @@
 declare module './pokedex.json' {
-  export type PokedexEntry = readonly [pokedexNumber: number, name: string];
-  const pokedex: readonly PokedexEntry[];
+  const pokedex: readonly string[];
   export default pokedex;
 }

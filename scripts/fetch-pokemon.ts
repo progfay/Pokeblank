@@ -33,21 +33,17 @@ if (errors) {
   process.exit(1);
 }
 
-type Entry = [number, string];
-const pokedex: Entry[] = (
+const pokedex: string[] = (
   data.pokemonspecies as {
     id: number;
     pokemonspeciesnames: { name: string }[];
   }[]
 )
-  .map((s) => {
-    const nameEntry = s.pokemonspeciesnames[0];
-    return nameEntry ? ([s.id, nameEntry.name] as Entry) : null;
-  })
-  .filter((e): e is Entry => e !== null);
+  .map((s) => s.pokemonspeciesnames[0]?.name ?? null)
+  .filter((name): name is string => name !== null);
 
 const specialCharsSet = new Set<string>();
-for (const [, name] of pokedex) {
+for (const name of pokedex) {
   for (const g of segment(name)) {
     if (isSpecialChar(g)) specialCharsSet.add(g);
   }
@@ -60,8 +56,7 @@ await writeFile("src/data/pokedex.json", JSON.stringify(pokedex));
 await writeFile(
   "src/data/pokedex.json.d.ts",
   `declare module './pokedex.json' {
-  export type PokedexEntry = readonly [pokedexNumber: number, name: string];
-  const pokedex: readonly PokedexEntry[];
+  const pokedex: readonly string[];
   export default pokedex;
 }
 `,

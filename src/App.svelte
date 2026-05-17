@@ -5,7 +5,7 @@
   import { createQuizStore } from './lib/stores/quiz.svelte.ts';
   import type { PokedexEntry } from './lib/quiz/question.ts';
 
-  const pokedex = pokedexData as readonly PokedexEntry[];
+  const pokedex: readonly PokedexEntry[] = pokedexData.map((name, i) => [i + 1, name] as const);
   const quiz = createQuizStore(pokedex);
 
   let vh = $state(
