@@ -1,0 +1,71 @@
+import { normalize } from '../text/normalize.ts';
+import { validate } from '../text/validation.ts';
+import {
+  generateQuestion,
+  pickRandomPokemon,
+  withRevealed,
+  type PokedexEntry,
+  type Question,
+} from '../quiz/question.ts';
+import { checkAnswer } from '../quiz/answer.ts';
+import { findAllMatchingPokedexEntries } from '../quiz/matching.ts';
+
+export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: readonly string[]) {
+  function newRound(): Question {
+    return generateQuestion(pickRandomPokemon(pokedex));
+  }
+
+  let mode = $state<'question' | 'answer'>('question');
+  let question = $state<Question>(newRound());
+  let rawInput = $state('');
+  let error = $state<string | null>(null);
+  let matchingEntries = $state<readonly PokedexEntry[]>([]);
+  let wasCorrect = $state(false);
+
+  return {
+    get mode() { return mode; },
+    get question() { return question; },
+    get rawInput() { return rawInput; },
+    get error() { return error; },
+    get matchingEntries() { return matchingEntries; },
+    get wasCorrect() { return wasCorrect; },
+
+    onInputChange(value: string) {
+      rawInput = value;
+      error = null;
+    },
+
+    handleSubmit() {
+      const normalized = normalize(rawInput);
+      const validated = validate(normalized, specialChars);
+      if (validated === null) {
+        error = 'カタカナで入力してください';
+        return;
+      }
+      error = null;
+      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
+      const result = checkAnswer(validated, matchingEntries);
+      wasCorrect = result.kind === 'correct';
+      mode = 'answer';
+    },
+
+    handlePass() {
+      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
+      wasCorrect = false;
+      mode = 'answer';
+    },
+
+    handleReveal(index: number) {
+      question = withRevealed(question, index);
+    },
+
+    handleNext() {
+      question = newRound();
+      rawInput = '';
+      error = null;
+      matchingEntries = [];
+      wasCorrect = false;
+      mode = 'question';
+    },
+  };
+}
