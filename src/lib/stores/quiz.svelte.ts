@@ -11,6 +11,7 @@ import { withRevealed } from '../quiz/question.ts';
 
 export function createQuizStore(pokedex: readonly PokedexEntry[]) {
   const segmentedPokedex = segmentPokedex(pokedex);
+  const nameSet = new Set(pokedex.map(([, name]) => name));
 
   function newRound(): Question {
     return generateQuestion(pickRandomPokemon(pokedex));
@@ -41,7 +42,7 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
     handleSubmit() {
       const normalized = normalize(rawInput);
       const { all, strict: strictEntries } = findMatchingEntries(segmentedPokedex, question);
-      const result = checkAnswer(normalized, pokedex, strictEntries);
+      const result = checkAnswer(normalized, nameSet, strictEntries);
       if (result.kind === 'not-a-pokemon') {
         error = '未知のポケモンです';
         return;

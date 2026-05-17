@@ -8,14 +8,13 @@ export type AnswerResult =
 
 export function checkAnswer(
   input: Normalized,
-  pokedex: readonly PokedexEntry[],
+  nameSet: ReadonlySet<string>,
   matchingEntries: readonly PokedexEntry[],
 ): AnswerResult {
   const matched = matchingEntries.find(([, name]) => name === input);
   if (matched !== undefined) return { kind: "correct", matchedPokemon: matched };
 
-  const existsInPokedex = pokedex.some(([, name]) => name === input);
-  if (!existsInPokedex) return { kind: "not-a-pokemon" };
+  if (!nameSet.has(input)) return { kind: "not-a-pokemon" };
 
   return { kind: "incorrect" };
 }
