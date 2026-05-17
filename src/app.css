@@ -169,13 +169,6 @@ body {
   position: relative;
 }
 
-@media (min-width: 540px) {
-  .screen {
-    border-left: 1px solid var(--color-border);
-    border-right: 1px solid var(--color-border);
-  }
-}
-
 /* ============================================================
  * Topbar
  * ============================================================ */
