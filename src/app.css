@@ -55,6 +55,9 @@
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
+  /* ---- Breakpoints ---- */
+  --breakpoint-md: 768px;
+
   /* ---- Focus ---- */
   --focus-ring-width: 2px;
   --focus-ring-offset: 2px;
@@ -157,7 +160,7 @@ body {
 /* Screen column — mobile-first, max 480px wide */
 .screen {
   width: 100%;
-  max-width: 480px;
+  max-width: var(--breakpoint-md);
   height: 100dvh;
   display: flex;
   flex-direction: column;
