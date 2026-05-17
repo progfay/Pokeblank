@@ -50,21 +50,6 @@
 </header>
 
 <main class="stage">
-  <div class="word-wrap">
-    {#key shakeKey}
-      <div class="word" class:word-shake={error !== null}>
-        {#each question.letters as letter, i}
-          <Letter
-            {letter}
-            index={i}
-            isHint={hintIndices.has(i)}
-            {onreveal}
-          />
-        {/each}
-      </div>
-    {/key}
-  </div>
-
   <div class="answer-zone field" data-state={error ? 'error' : undefined}>
     <div class="input-row">
       <InputField
@@ -101,6 +86,20 @@
     </p>
   </div>
 
+  <div class="word-wrap">
+    {#key shakeKey}
+      <div class="word" class:word-shake={error !== null}>
+        {#each question.letters as letter, i}
+          <Letter
+            {letter}
+            index={i}
+            isHint={hintIndices.has(i)}
+            {onreveal}
+          />
+        {/each}
+      </div>
+    {/key}
+  </div>
 </main>
 
 <style>
@@ -115,6 +114,7 @@
   }
 
   .word-wrap {
+    order: -1;
     flex: 0 0 auto;
     padding-top: var(--space-6);
     display: flex;
