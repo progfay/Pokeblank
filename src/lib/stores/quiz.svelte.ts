@@ -46,9 +46,13 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
         return;
       }
       matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
-      const result = checkAnswer(validated, matchingEntries);
+      const result = checkAnswer(validated, pokedex, matchingEntries);
+      if (result.kind === 'not-a-pokemon') {
+        error = '未知のポケモンです';
+        return;
+      }
       if (result.kind === 'incorrect') {
-        error = 'ちがいます';
+        error = 'パターンにマッチしません';
         return;
       }
       error = null;
