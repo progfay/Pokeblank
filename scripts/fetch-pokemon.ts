@@ -1,6 +1,4 @@
 import { writeFile } from "node:fs/promises";
-import { segment } from "../src/lib/text/segment.ts";
-import { isSpecialChar } from "../src/lib/text/special-chars.ts";
 
 const ENDPOINT = "https://graphql.pokeapi.co/v1beta2";
 
@@ -52,16 +50,6 @@ for (const [i, { id }] of entries.entries()) {
 
 const pokedex: string[] = entries.map(({ name }) => name);
 
-const specialCharsSet = new Set<string>();
-for (const name of pokedex) {
-  for (const g of segment(name)) {
-    if (isSpecialChar(g)) specialCharsSet.add(g);
-  }
-}
-const specialChars = [...specialCharsSet].sort(
-  (a, b) => (a.codePointAt(0) ?? 0) - (b.codePointAt(0) ?? 0),
-);
-
 await writeFile("src/data/pokedex.json", JSON.stringify(pokedex));
 await writeFile(
   "src/data/pokedex.json.d.ts",
@@ -71,15 +59,4 @@ await writeFile(
 }
 `,
 );
-await writeFile("src/data/special-chars.json", JSON.stringify(specialChars));
-await writeFile(
-  "src/data/special-chars.json.d.ts",
-  `declare module './special-chars.json' {
-  const specialChars: readonly string[];
-  export default specialChars;
-}
-`,
-);
-
-console.log(`Done: ${pokedex.length} Pokémon, ${specialChars.length} special chars`);
-console.log("Special chars:", specialChars.join(" "));
+console.log(`Done: ${pokedex.length} Pokémon`);
