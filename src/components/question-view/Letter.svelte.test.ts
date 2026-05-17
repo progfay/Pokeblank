@@ -36,7 +36,7 @@ describe("Letter", () => {
     div.remove();
   });
 
-  it("calls onreveal with index on dblclick", () => {
+  it("calls onreveal with index on click", () => {
     const div = document.createElement("div");
     document.body.appendChild(div);
     const onreveal = vi.fn();
@@ -45,7 +45,7 @@ describe("Letter", () => {
       props: { letter: { kind: "masked", value: "ピ" }, index: 3, onreveal },
     });
     const btn = div.querySelector("button")!;
-    btn.dispatchEvent(new MouseEvent("dblclick", { bubbles: true }));
+    btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     expect(onreveal).toHaveBeenCalledWith(3);
     div.remove();
   });

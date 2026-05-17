@@ -18,7 +18,7 @@
 {#if kind === 'hidden'}
   <button
     class="tile tile-hidden"
-    ondblclick={() => onreveal(index)}
+    onclick={() => onreveal(index)}
     aria-label="ヒントを開示"
   >◯</button>
 {:else}
