@@ -88,6 +88,16 @@
       </div>
     {/key}
   </div>
+
+  <p class="tip">
+    <!-- Lucide lightbulb, stroke 1.5 -->
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
+      <path d="M9 18h6"></path>
+      <path d="M10 22h4"></path>
+    </svg>
+    隠れてる文字をタップするとヒントが見れるよ
+  </p>
 </main>
 
 <header class="topbar">
@@ -162,5 +172,17 @@
 
   .answer-feedback svg {
     flex-shrink: 0;
+  }
+
+  .tip {
+    margin: auto 0 0;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: var(--text-caption-size);
+    line-height: var(--text-caption-lh);
+    color: var(--color-text-subtle);
   }
 </style>
