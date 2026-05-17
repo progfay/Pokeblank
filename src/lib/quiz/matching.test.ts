@@ -26,7 +26,6 @@ describe("matchesPattern", () => {
   });
 
   it("returns false when revealed chars do not match", () => {
-    // question with all revealed (hand-craft)
     const q = {
       letters: [
         { kind: "revealed" as const, value: "ア" },
@@ -35,6 +34,27 @@ describe("matchesPattern", () => {
     };
     expect(matchesPattern(["ウ", "エ"], q)).toBe(false);
     expect(matchesPattern(["ア", "エ"], q)).toBe(true);
+  });
+
+  it("ignores hint-revealed chars when not strict", () => {
+    const q = {
+      letters: [
+        { kind: "revealed" as const, value: "ア" },
+        { kind: "hint-revealed" as const, value: "イ" },
+      ],
+    };
+    expect(matchesPattern(["ア", "ウ"], q)).toBe(true);
+  });
+
+  it("enforces hint-revealed chars when strict", () => {
+    const q = {
+      letters: [
+        { kind: "revealed" as const, value: "ア" },
+        { kind: "hint-revealed" as const, value: "イ" },
+      ],
+    };
+    expect(matchesPattern(["ア", "ウ"], q, true)).toBe(false);
+    expect(matchesPattern(["ア", "イ"], q, true)).toBe(true);
   });
 });
 

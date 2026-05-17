@@ -38,8 +38,8 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
 
     handleSubmit() {
       const normalized = normalize(rawInput);
-      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
-      const result = checkAnswer(normalized, pokedex, matchingEntries);
+      const strictEntries = findAllMatchingPokedexEntries(pokedex, question, true);
+      const result = checkAnswer(normalized, pokedex, strictEntries);
       if (result.kind === 'not-a-pokemon') {
         error = '未知のポケモンです';
         return;
@@ -49,6 +49,7 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
         return;
       }
       error = null;
+      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
       wasCorrect = true;
       matchedEntry = result.matchedPokemon;
       mode = 'answer';
