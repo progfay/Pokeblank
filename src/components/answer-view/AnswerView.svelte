@@ -44,6 +44,8 @@
       {#each question.letters as letter}
         {#if letter.kind === 'revealed'}
           <span class="tile tile-shown">{letter.value}</span>
+        {:else if letter.kind === 'hint-revealed'}
+          <span class="tile tile-hint">{letter.value}</span>
         {:else}
           <span class="tile tile-hidden" aria-hidden="true">◯</span>
         {/if}
