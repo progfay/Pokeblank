@@ -28,13 +28,12 @@ export function findMatchingEntries(
   segmentedPokedex: readonly SegmentedEntry[],
   question: Question,
 ): { all: readonly PokedexEntry[]; strict: readonly PokedexEntry[] } {
-  const allSegmented = segmentedPokedex.filter(({ graphemes }) =>
-    matchesPattern(graphemes, question),
-  );
-  return {
-    all: allSegmented.map(({ entry }) => entry),
-    strict: allSegmented
-      .filter(({ graphemes }) => matchesPattern(graphemes, question, true))
-      .map(({ entry }) => entry),
-  };
+  const all: PokedexEntry[] = [];
+  const strict: PokedexEntry[] = [];
+  for (const { graphemes, entry } of segmentedPokedex) {
+    if (!matchesPattern(graphemes, question)) continue;
+    all.push(entry);
+    if (matchesPattern(graphemes, question, true)) strict.push(entry);
+  }
+  return { all, strict };
 }
