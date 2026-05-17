@@ -1,5 +1,6 @@
 import { normalize } from '../text/normalize.ts';
 import { validate } from '../text/validation.ts';
+import { MESSAGES } from '../constants/messages.ts';
 import {
   generateQuestion,
   pickRandomPokemon,
@@ -43,7 +44,7 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
       const normalized = normalize(rawInput);
       const validated = validate(normalized, specialChars);
       if (validated === null) {
-        error = 'カタカナで入力してください';
+        error = MESSAGES.ERROR_INVALID_INPUT;
         return;
       }
       error = null;
