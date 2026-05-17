@@ -9,7 +9,7 @@
     "preview": "vp preview",
     "check": "vp check",
     "test": "vp test",
-    "generate:pokedex": "node --experimental-strip-types scripts/fetch-pokemon.ts"
+    "generate:pokedex": "node scripts/fetch-pokemon.ts"
   },
   "overrides": {
     "vite": "npm:@voidzero-dev/vite-plus-core@0.1.21",
