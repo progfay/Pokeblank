@@ -19,16 +19,6 @@
 
 <main class="result-body">
   <div class="verdict">
-    <div class="word">
-      {#each question.letters as letter}
-        {#if letter.kind === 'revealed'}
-          <span class="tile tile-shown">{letter.value}</span>
-        {:else}
-          <span class="tile tile-hidden" aria-hidden="true">◯</span>
-        {/if}
-      {/each}
-    </div>
-
     <span class="verdict-label" class:verdict-ok={wasCorrect} class:verdict-pass={!wasCorrect}>
       {#if wasCorrect}
         <!-- Lucide check, stroke 2 -->
@@ -40,6 +30,16 @@
         <span>Skipped</span>
       {/if}
     </span>
+
+    <div class="word">
+      {#each question.letters as letter}
+        {#if letter.kind === 'revealed'}
+          <span class="tile tile-shown">{letter.value}</span>
+        {:else}
+          <span class="tile tile-hidden" aria-hidden="true">◯</span>
+        {/if}
+      {/each}
+    </div>
   </div>
 
   <section class="matches">
@@ -86,7 +86,7 @@
     flex-direction: column;
     align-items: center;
     gap: var(--space-3);
-    padding-top: var(--space-6);
+    padding-top: 0;
     flex-shrink: 0;
   }
 
