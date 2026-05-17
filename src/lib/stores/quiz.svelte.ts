@@ -7,6 +7,7 @@ import {
 } from '../quiz/question.ts';
 import { checkAnswer } from '../quiz/answer.ts';
 import { findAllMatchingPokedexEntries } from '../quiz/matching.ts';
+import { withRevealed } from '../quiz/question.ts';
 
 export function createQuizStore(pokedex: readonly PokedexEntry[]) {
   function newRound(): Question {
@@ -67,6 +68,7 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
       const next = new Set(hintIndices);
       next.add(index);
       hintIndices = next;
+      question = withRevealed(question, index);
     },
 
     handleNext() {
