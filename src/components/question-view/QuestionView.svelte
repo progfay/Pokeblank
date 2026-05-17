@@ -86,15 +86,22 @@
     {/key}
   </div>
 
-  <p class="tip">
-    <!-- Lucide lightbulb, stroke 1.5 -->
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
-      <path d="M9 18h6"></path>
-      <path d="M10 22h4"></path>
-    </svg>
-    隠れてる文字をタップするとヒントが見れるよ
-  </p>
+  <div class="bottom">
+    <p class="tip">
+      <!-- Lucide lightbulb, stroke 1.5 -->
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-info-fg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
+        <path d="M9 18h6"></path>
+        <path d="M10 22h4"></path>
+      </svg>
+      隠れてる文字をタップするとヒントが見れるよ
+    </p>
+    <div class="credit">
+      <p>ポケットモンスター・ポケモン・Pokémonは<a href="https://www.nintendo.co.jp/" target="_blank" rel="noopener noreferrer">任天堂</a>・<a href="http://www.creatures.co.jp/" target="_blank" rel="noopener noreferrer">クリーチャーズ</a>・<a href="http://www.gamefreak.co.jp/" target="_blank" rel="noopener noreferrer">ゲームフリーク</a>の登録商標です。</p>
+      <p>当サイトは個人ファンサイトであり、<a href="http://www.pokemon.co.jp/" target="_blank" rel="noopener noreferrer">株式会社ポケモン</a>他企業様とは一切関係ありません。</p>
+      <p>©&nbsp;2026&nbsp;<a href="https://github.com/progfay" target="_blank" rel="noopener noreferrer">progfay</a></p>
+    </div>
+  </div>
 </main>
 
 <header class="topbar">
@@ -171,15 +178,41 @@
     flex-shrink: 0;
   }
 
-  .tip {
+  .bottom {
     margin: auto 0 0;
     padding-bottom: env(safe-area-inset-bottom, 0px);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .tip {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 4px;
     font-size: var(--text-caption-size);
     line-height: var(--text-caption-lh);
+    color: var(--color-text-muted);
+  }
+
+  .credit {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    text-align: center;
+    font-size: 10px;
+    line-height: 1.6;
     color: var(--color-text-subtle);
+  }
+
+  .credit p {
+    margin: 0;
+  }
+
+  .credit a {
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 2px;
   }
 </style>
