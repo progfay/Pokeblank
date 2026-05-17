@@ -14,6 +14,17 @@ describe("Letter", () => {
     div.remove();
   });
 
+  it("shows value when hint-revealed", () => {
+    const div = document.createElement("div");
+    document.body.appendChild(div);
+    mount(Letter, {
+      target: div,
+      props: { letter: { kind: "hint-revealed", value: "ピ" }, index: 0, onreveal: vi.fn() },
+    });
+    expect(div.textContent).toContain("ピ");
+    div.remove();
+  });
+
   it("shows ◯ when masked", () => {
     const div = document.createElement("div");
     document.body.appendChild(div);
@@ -56,6 +67,17 @@ describe("Letter", () => {
     mount(Letter, {
       target: div,
       props: { letter: { kind: "revealed", value: "ピ" }, index: 0, onreveal: vi.fn() },
+    });
+    expect(div.querySelector("button")).toBeNull();
+    div.remove();
+  });
+
+  it("does not render button when hint-revealed", () => {
+    const div = document.createElement("div");
+    document.body.appendChild(div);
+    mount(Letter, {
+      target: div,
+      props: { letter: { kind: "hint-revealed", value: "ピ" }, index: 0, onreveal: vi.fn() },
     });
     expect(div.querySelector("button")).toBeNull();
     div.remove();

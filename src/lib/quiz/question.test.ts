@@ -69,7 +69,7 @@ describe("withRevealed", () => {
     const maskedIdx = q.letters.findIndex((l) => l.kind === "masked");
     if (maskedIdx >= 0) {
       const updated = withRevealed(q, maskedIdx);
-      expect(updated.letters[maskedIdx].kind).toBe("revealed");
+      expect(updated.letters[maskedIdx].kind).toBe("hint-revealed");
     }
   });
 

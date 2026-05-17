@@ -334,9 +334,9 @@ body {
 .tile-hidden:hover { color: var(--color-text-muted); }
 
 .tile-hint {
-  color: var(--color-accent-hover);
-  border-color: var(--color-accent-subtle);
-  background: color-mix(in oklab, var(--color-accent-subtle) 30%, var(--color-surface));
+  color: var(--color-info-fg);
+  border-color: var(--color-info-border);
+  background: color-mix(in oklab, var(--color-info-bg) 30%, var(--color-surface));
   border-style: solid;
 }
 

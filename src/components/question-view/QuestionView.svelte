@@ -8,7 +8,6 @@
     question: Question;
     rawInput: string;
     error: string | null;
-    hintIndices: Set<number>;
     oninputchange: (value: string) => void;
     onsubmit: () => void;
     onpass: () => void;
@@ -19,7 +18,6 @@
     question,
     rawInput,
     error,
-    hintIndices,
     oninputchange,
     onsubmit,
     onpass,
@@ -81,7 +79,6 @@
           <Letter
             {letter}
             index={i}
-            isHint={hintIndices.has(i)}
             {onreveal}
           />
         {/each}

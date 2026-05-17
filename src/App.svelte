@@ -37,7 +37,6 @@
       question={quiz.question}
       rawInput={quiz.rawInput}
       error={quiz.error}
-      hintIndices={quiz.hintIndices}
       oninputchange={(v) => quiz.onInputChange(v)}
       onsubmit={() => quiz.handleSubmit()}
       onpass={() => quiz.handlePass()}

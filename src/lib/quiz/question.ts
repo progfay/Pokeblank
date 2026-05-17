@@ -2,7 +2,7 @@ import { segment } from "../text/segment.ts";
 import { shuffleIndices } from "./shuffle.ts";
 
 export type Letter = {
-  readonly kind: "masked" | "revealed";
+  readonly kind: "masked" | "revealed" | "hint-revealed";
   readonly value: string;
 };
 
@@ -38,7 +38,7 @@ export function generateQuestion(entry: PokedexEntry): Question {
 export function withRevealed(question: Question, letterIndex: number): Question {
   return {
     letters: question.letters.map((letter, i) =>
-      i === letterIndex ? { ...letter, kind: "revealed" } : letter,
+      i === letterIndex ? { ...letter, kind: "hint-revealed" } : letter,
     ),
   };
 }

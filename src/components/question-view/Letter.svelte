@@ -4,14 +4,13 @@
   interface Props {
     letter: Letter;
     index: number;
-    isHint: boolean;
     onreveal: (index: number) => void;
   }
 
-  let { letter, index, isHint, onreveal }: Props = $props();
+  let { letter, index, onreveal }: Props = $props();
 
   const kind = $derived(
-    letter.kind === 'revealed' ? 'shown' : isHint ? 'hint' : 'hidden'
+    letter.kind === 'revealed' ? 'shown' : letter.kind === 'hint-revealed' ? 'hint' : 'hidden'
   );
 </script>
 

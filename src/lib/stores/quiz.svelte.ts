@@ -20,7 +20,6 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
   let error = $state<string | null>(null);
   let matchingEntries = $state<readonly PokedexEntry[]>([]);
   let wasCorrect = $state(false);
-  let hintIndices = $state(new Set<number>());
   let matchedEntry = $state<PokedexEntry | null>(null);
 
   return {
@@ -30,7 +29,6 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
     get error() { return error; },
     get matchingEntries() { return matchingEntries; },
     get wasCorrect() { return wasCorrect; },
-    get hintIndices() { return hintIndices; },
     get matchedEntry() { return matchedEntry; },
 
     onInputChange(value: string) {
@@ -64,10 +62,6 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
     },
 
     handleReveal(index: number) {
-      if (hintIndices.has(index)) return;
-      const next = new Set(hintIndices);
-      next.add(index);
-      hintIndices = next;
       question = withRevealed(question, index);
     },
 
@@ -77,7 +71,6 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
       error = null;
       matchingEntries = [];
       wasCorrect = false;
-      hintIndices = new Set();
       matchedEntry = null;
       mode = 'question';
     },
