@@ -11,7 +11,16 @@
   }
 
   let { question, matchingEntries, wasCorrect, matchedEntry, onnext }: Props = $props();
+
+  function handleKeydown(e: KeyboardEvent) {
+    if (e.key === 'Enter' && !e.isComposing) {
+      e.preventDefault();
+      onnext();
+    }
+  }
 </script>
+
+<svelte:window onkeydown={handleKeydown} />
 
 <header class="topbar">
   <span class="brand">Pokeblank</span>
