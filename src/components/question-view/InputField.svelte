@@ -21,7 +21,7 @@
   {value}
   oninput={(e) => onchange((e.target as HTMLInputElement).value)}
   onkeydown={handleKeydown}
-  placeholder="こたえを入力"
+  placeholder="このポケモンは？"
   autocomplete="off"
   autocorrect="off"
   autocapitalize="none"
