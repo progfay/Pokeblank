@@ -33,3 +33,18 @@ export function findAllMatchingPokedexEntries(
     .filter(({ graphemes }) => matchesPattern(graphemes, question, strict))
     .map(({ entry }) => entry);
 }
+
+export function findMatchingEntries(
+  segmentedPokedex: readonly SegmentedEntry[],
+  question: Question,
+): { all: readonly PokedexEntry[]; strict: readonly PokedexEntry[] } {
+  const allSegmented = segmentedPokedex.filter(({ graphemes }) =>
+    matchesPattern(graphemes, question),
+  );
+  return {
+    all: allSegmented.map(({ entry }) => entry),
+    strict: allSegmented
+      .filter(({ graphemes }) => matchesPattern(graphemes, question, true))
+      .map(({ entry }) => entry),
+  };
+}

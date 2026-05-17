@@ -6,7 +6,7 @@ import {
   type Question,
 } from '../quiz/question.ts';
 import { checkAnswer } from '../quiz/answer.ts';
-import { findAllMatchingPokedexEntries, segmentPokedex } from '../quiz/matching.ts';
+import { findAllMatchingPokedexEntries, findMatchingEntries, segmentPokedex } from '../quiz/matching.ts';
 import { withRevealed } from '../quiz/question.ts';
 
 export function createQuizStore(pokedex: readonly PokedexEntry[]) {
@@ -40,7 +40,7 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
 
     handleSubmit() {
       const normalized = normalize(rawInput);
-      const strictEntries = findAllMatchingPokedexEntries(segmentedPokedex, question, true);
+      const { all, strict: strictEntries } = findMatchingEntries(segmentedPokedex, question);
       const result = checkAnswer(normalized, pokedex, strictEntries);
       if (result.kind === 'not-a-pokemon') {
         error = '未知のポケモンです';
@@ -51,7 +51,7 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
         return;
       }
       error = null;
-      matchingEntries = findAllMatchingPokedexEntries(segmentedPokedex, question);
+      matchingEntries = all;
       wasCorrect = true;
       matchedEntry = result.matchedPokemon;
       mode = 'answer';
