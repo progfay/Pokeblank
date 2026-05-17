@@ -14,7 +14,7 @@
 </script>
 
 <header class="topbar">
-  <span class="brand">Pokeblank</span>
+  <span class="brand">Pokéblank</span>
 </header>
 
 <button class="btn btn-ghost next-fab" onclick={onnext} aria-label="次の問題へ">
