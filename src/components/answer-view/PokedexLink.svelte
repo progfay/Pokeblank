@@ -4,25 +4,70 @@
 
   interface Props {
     entry: PokedexEntry;
+    isPicked: boolean;
   }
 
-  let { entry }: Props = $props();
+  let { entry, isPicked }: Props = $props();
 
   const url = $derived(pokedexUrl(entry[0]));
+  const num = $derived(String(entry[0]).padStart(4, '0'));
 </script>
 
-<a href={url} target="_blank" rel="noopener noreferrer" class="link">
-  {entry[1]}
+<a class="match-row" class:match-row-picked={isPicked} href={url} target="_blank" rel="noreferrer noopener">
+  <span class="match-num">{num}</span>
+  <span class="match-name">{entry[1]}</span>
+  <span class="match-ext" aria-hidden="true">
+    <!-- Lucide external-link, stroke 1.5 -->
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M15 3h6v6"></path>
+      <line x1="10" y1="14" x2="21" y2="3"></line>
+      <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"></path>
+    </svg>
+  </span>
 </a>
 
 <style>
-  .link {
-    color: var(--color-primary);
+  .match-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-1);
+    color: var(--color-text);
     text-decoration: none;
-    font-size: 1rem;
+    transition: background-color var(--duration-fast) var(--ease-out);
   }
 
-  .link:hover {
-    text-decoration: underline;
+  .match-row:hover {
+    background: var(--color-surface-muted);
+  }
+
+  .match-num {
+    font-family: var(--font-mono);
+    font-size: var(--text-caption-size);
+    line-height: var(--text-caption-lh);
+    color: var(--color-text-subtle);
+    font-feature-settings: "tnum";
+    min-width: 36px;
+  }
+
+  .match-name {
+    font-size: var(--text-body-lg-size);
+    line-height: var(--text-body-lg-lh);
+    font-weight: var(--font-weight-medium);
+  }
+
+  .match-row-picked .match-name {
+    color: var(--color-success-fg);
+  }
+
+  .match-ext {
+    color: var(--color-text-subtle);
+    display: inline-flex;
+    transition: color var(--duration-fast) var(--ease-out);
+  }
+
+  .match-row:hover .match-ext {
+    color: var(--color-accent-hover);
   }
 </style>

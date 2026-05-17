@@ -1,12 +1,11 @@
 <script lang="ts">
   interface Props {
     value: string;
-    error: string | null;
     onchange: (value: string) => void;
     onsubmit: () => void;
   }
 
-  let { value, error, onchange, onsubmit }: Props = $props();
+  let { value, onchange, onsubmit }: Props = $props();
 
   function handleKeydown(e: KeyboardEvent) {
     if (e.key === 'Enter' && !e.isComposing) {
@@ -16,48 +15,29 @@
   }
 </script>
 
-<div class="field">
-  <input
-    type="text"
-    {value}
-    oninput={(e) => onchange((e.target as HTMLInputElement).value)}
-    onkeydown={handleKeydown}
-    placeholder="ポケモン名を入力"
-    autocomplete="off"
-    autocorrect="off"
-    autocapitalize="none"
-    spellcheck="false"
-  />
-  {#if error}
-    <p class="error">{error}</p>
-  {/if}
-</div>
+<input
+  class="input answer-input"
+  type="text"
+  {value}
+  oninput={(e) => onchange((e.target as HTMLInputElement).value)}
+  onkeydown={handleKeydown}
+  placeholder="こたえを入力"
+  autocomplete="off"
+  autocorrect="off"
+  autocapitalize="none"
+  spellcheck="false"
+  inputmode="text"
+/>
 
 <style>
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
+  .answer-input {
+    height: 48px;
+    font-size: 18px;
+    text-align: center;
   }
 
-  input {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    font-size: 1rem;
-    font-family: inherit;
-    background: var(--color-surface);
-    color: var(--color-text);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius);
-    outline: none;
-  }
-
-  input:focus {
-    border-color: var(--color-primary);
-  }
-
-  .error {
-    color: var(--color-primary);
-    font-size: 0.85rem;
+  .answer-input::placeholder {
+    text-align: center;
+    font-size: var(--text-body-lg-size);
   }
 </style>

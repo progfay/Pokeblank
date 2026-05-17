@@ -3,7 +3,7 @@ import { describe, expect, it, vi } from "vitest";
 import SpecialKeyboard from "./SpecialKeyboard.svelte";
 
 describe("SpecialKeyboard", () => {
-  it("renders buttons for each char", () => {
+  it("renders buttons only for ♀ and ♂, filtering other chars", () => {
     const div = document.createElement("div");
     document.body.appendChild(div);
     mount(SpecialKeyboard, {
@@ -11,7 +11,7 @@ describe("SpecialKeyboard", () => {
       props: { chars: ["♀", "♂", "２"], onpress: vi.fn() },
     });
     const buttons = div.querySelectorAll("button");
-    expect(buttons).toHaveLength(3);
+    expect(buttons).toHaveLength(2);
     div.remove();
   });
 
@@ -39,14 +39,14 @@ describe("SpecialKeyboard", () => {
     div.remove();
   });
 
-  it("shows label text when chars present", () => {
+  it("renders nothing when chars contains no ♀ or ♂", () => {
     const div = document.createElement("div");
     document.body.appendChild(div);
     mount(SpecialKeyboard, {
       target: div,
-      props: { chars: ["♀"], onpress: vi.fn() },
+      props: { chars: ["２", "Z"], onpress: vi.fn() },
     });
-    expect(div.textContent).toContain("特殊文字");
+    expect(div.querySelector("button")).toBeNull();
     div.remove();
   });
 });

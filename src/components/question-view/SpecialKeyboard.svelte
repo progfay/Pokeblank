@@ -5,51 +5,43 @@
   }
 
   let { chars, onpress }: Props = $props();
+
+  const SHOWN_CHARS = new Set(['♀', '♂']);
+  const visibleChars = $derived(chars.filter((c) => SHOWN_CHARS.has(c)));
 </script>
 
-{#if chars.length > 0}
-  <div class="keyboard">
-    <p class="label">特殊文字</p>
-    <div class="keys">
-      {#each chars as char}
-        <button class="key" onclick={() => onpress(char)}>{char}</button>
-      {/each}
-    </div>
+{#if visibleChars.length > 0}
+  <div class="keypad">
+    {#each visibleChars as char}
+      <button class="key" onclick={() => onpress(char)}>{char}</button>
+    {/each}
   </div>
 {/if}
 
 <style>
-  .keyboard {
+  .keypad {
     display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-  }
-
-  .label {
-    font-size: 0.75rem;
-    color: var(--color-muted);
-  }
-
-  .keys {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    gap: var(--space-2);
+    justify-content: center;
   }
 
   .key {
-    min-width: 2.5rem;
-    height: 2.5rem;
-    padding: 0 0.5rem;
-    font-size: 1rem;
+    min-width: 44px;
+    height: 36px;
+    padding: 0 var(--space-3);
+    font-size: var(--text-body-lg-size);
     font-family: inherit;
     background: var(--color-surface);
     color: var(--color-text);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius);
+    border-radius: var(--radius-full);
     cursor: pointer;
+    transition: background-color var(--duration-fast) var(--ease-out),
+                border-color var(--duration-fast) var(--ease-out);
   }
 
-  .key:active {
-    background: var(--color-primary);
+  .key:hover {
+    background: var(--color-surface-muted);
+    border-color: var(--color-border-strong);
   }
 </style>

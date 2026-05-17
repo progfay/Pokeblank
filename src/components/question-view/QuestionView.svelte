@@ -9,6 +9,7 @@
     specialChars: readonly string[];
     rawInput: string;
     error: string | null;
+    hintIndices: Set<number>;
     oninputchange: (value: string) => void;
     onsubmit: () => void;
     onpass: () => void;
@@ -20,85 +21,152 @@
     specialChars,
     rawInput,
     error,
+    hintIndices,
     oninputchange,
     onsubmit,
     onpass,
     onreveal,
   }: Props = $props();
+
+  let shakeKey = $state(0);
+
+  $effect(() => {
+    if (error) {
+      shakeKey += 1;
+    }
+  });
+
+  const canSubmit = $derived(rawInput.trim().length > 0);
 </script>
 
-<div class="view">
-  <h1 class="title">ポケブランク</h1>
+<header class="topbar">
+  <span class="brand">Pokeblank</span>
+  <button class="btn btn-ghost btn-sm" onclick={onpass} aria-label="Skip">
+    <!-- Lucide skip-forward, stroke 1.5 -->
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+      <polygon points="5 4 15 12 5 20 5 4"></polygon>
+      <line x1="19" y1="4" x2="19" y2="20"></line>
+    </svg>
+    <span>Skip</span>
+  </button>
+</header>
 
-  <div class="letters">
-    {#each question.letters as letter, i}
-      <Letter {letter} index={i} {onreveal} />
-    {/each}
+<main class="stage">
+  <div class="word-wrap">
+    {#key shakeKey}
+      <div class="word" class:word-shake={error !== null}>
+        {#each question.letters as letter, i}
+          <Letter
+            {letter}
+            index={i}
+            isHint={hintIndices.has(i)}
+            {onreveal}
+          />
+        {/each}
+      </div>
+    {/key}
   </div>
 
-  <InputField
-    value={rawInput}
-    {error}
-    onchange={oninputchange}
-    {onsubmit}
-  />
+  <div class="answer-zone field" data-state={error ? 'error' : undefined}>
+    <div class="input-row">
+      <InputField
+        value={rawInput}
+        onchange={oninputchange}
+        {onsubmit}
+      />
+      <button
+        class="btn btn-primary submit-btn"
+        onclick={onsubmit}
+        disabled={!canSubmit}
+        aria-label="解答を送信"
+      >
+        <!-- Lucide send, stroke 1.5 -->
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M22 2 11 13"></path>
+          <path d="M22 2 15 22l-4-9-9-4 20-7Z"></path>
+        </svg>
+      </button>
+    </div>
+
+    <p class="answer-feedback" class:is-shown={!!error} role="alert" aria-live="polite">
+      {#if error}
+        <!-- Lucide alert-circle, stroke 2 -->
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="8" x2="12" y2="12"></line>
+          <line x1="12" y1="16" x2="12.01" y2="16"></line>
+        </svg>
+        <span>{error}</span>
+      {:else}
+        &nbsp;
+      {/if}
+    </p>
+  </div>
 
   <SpecialKeyboard
     chars={specialChars}
     onpress={(char) => oninputchange(rawInput + char)}
   />
-
-  <div class="actions">
-    <button class="btn-submit" onclick={onsubmit}>答える</button>
-    <button class="btn-pass" onclick={onpass}>パス</button>
-  </div>
-</div>
+</main>
 
 <style>
-  .view {
+  .stage {
+    flex: 1 1 auto;
+    min-height: 0;
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
-    padding-top: 2rem;
+    padding: var(--space-5);
+    gap: var(--space-6);
+    justify-content: flex-start;
   }
 
-  .title {
-    font-size: 1.5rem;
-    text-align: center;
-    color: var(--color-primary);
-  }
-
-  .letters {
+  .word-wrap {
+    flex: 0 0 auto;
+    padding-top: var(--space-6);
     display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
+    align-items: center;
     justify-content: center;
   }
 
-  .actions {
+  .answer-zone {
     display: flex;
-    gap: 0.75rem;
+    flex-direction: column;
+    gap: var(--space-2);
+    flex: 0 0 auto;
   }
 
-  .btn-submit,
-  .btn-pass {
-    flex: 1;
-    padding: 0.75rem;
-    font-size: 1rem;
-    font-family: inherit;
-    border-radius: var(--radius);
-    cursor: pointer;
-    border: none;
+  .input-row {
+    display: flex;
+    gap: var(--space-2);
+    align-items: stretch;
   }
 
-  .btn-submit {
-    background: var(--color-primary);
-    color: white;
+  .submit-btn {
+    flex: 0 0 auto;
+    width: 48px;
+    height: 48px;
+    padding: 0;
   }
 
-  .btn-pass {
-    background: var(--color-surface);
-    color: var(--color-muted);
-    border: 1px solid var(--color-border);
+  .answer-feedback {
+    margin: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    justify-content: center;
+    width: 100%;
+    font-size: var(--text-body-size);
+    line-height: var(--text-body-lh);
+    color: var(--color-error-fg);
+    visibility: hidden;
+    min-height: 20px;
+  }
+
+  .answer-feedback.is-shown {
+    visibility: visible;
+  }
+
+  .answer-feedback svg {
+    flex-shrink: 0;
   }
 </style>

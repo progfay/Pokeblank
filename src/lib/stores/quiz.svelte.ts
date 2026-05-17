@@ -3,7 +3,6 @@ import { validate } from '../text/validation.ts';
 import {
   generateQuestion,
   pickRandomPokemon,
-  withRevealed,
   type PokedexEntry,
   type Question,
 } from '../quiz/question.ts';
@@ -21,6 +20,8 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
   let error = $state<string | null>(null);
   let matchingEntries = $state<readonly PokedexEntry[]>([]);
   let wasCorrect = $state(false);
+  let hintIndices = $state(new Set<number>());
+  let matchedEntry = $state<PokedexEntry | null>(null);
 
   return {
     get mode() { return mode; },
@@ -29,6 +30,8 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
     get error() { return error; },
     get matchingEntries() { return matchingEntries; },
     get wasCorrect() { return wasCorrect; },
+    get hintIndices() { return hintIndices; },
+    get matchedEntry() { return matchedEntry; },
 
     onInputChange(value: string) {
       rawInput = value;
@@ -46,17 +49,22 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
       matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
       const result = checkAnswer(validated, matchingEntries);
       wasCorrect = result.kind === 'correct';
+      matchedEntry = result.kind === 'correct' ? result.matchedPokemon : null;
       mode = 'answer';
     },
 
     handlePass() {
       matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
       wasCorrect = false;
+      matchedEntry = null;
       mode = 'answer';
     },
 
     handleReveal(index: number) {
-      question = withRevealed(question, index);
+      if (hintIndices.has(index)) return;
+      const next = new Set(hintIndices);
+      next.add(index);
+      hintIndices = next;
     },
 
     handleNext() {
@@ -65,6 +73,8 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
       error = null;
       matchingEntries = [];
       wasCorrect = false;
+      hintIndices = new Set();
+      matchedEntry = null;
       mode = 'question';
     },
   };
