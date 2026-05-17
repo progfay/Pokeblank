@@ -2,12 +2,9 @@ import { describe, expect, it, vi } from "vitest";
 import { segment } from "../text/segment.ts";
 import { findAllMatchingPokedexEntries, matchesPattern } from "./matching.ts";
 import { generateQuestion } from "./question.ts";
+import { POKEDEX_FIXTURE } from "./test-fixtures.ts";
 
-const POKEDEX = [
-  [25, "ピカチュウ"],
-  [26, "ライチュウ"],
-  [1, "フシギダネ"],
-] as const;
+const POKEDEX = POKEDEX_FIXTURE;
 
 describe("matchesPattern", () => {
   it("source pokemon always matches its own question", () => {

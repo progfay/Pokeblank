@@ -1,10 +1,8 @@
 import { describe, expect, it, vi } from "vitest";
 import { generateQuestion, pickRandomPokemon, withRevealed } from "./question.ts";
+import { ENTRIES_FIXTURE } from "./test-fixtures.ts";
 
-const POKEDEX = [
-  [25, "ピカチュウ"],
-  [26, "ライチュウ"],
-] as const;
+const POKEDEX = ENTRIES_FIXTURE;
 
 describe("pickRandomPokemon", () => {
   it("returns first entry when random is 0", () => {

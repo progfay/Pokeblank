@@ -1,13 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { checkAnswer } from "./answer.ts";
 import type { ValidatedInput } from "../text/validation.ts";
+import { ENTRIES_FIXTURE } from "./test-fixtures.ts";
 
 const asValidated = (s: string) => s as ValidatedInput;
 
-const ENTRIES = [
-  [25, "ピカチュウ"],
-  [26, "ライチュウ"],
-] as const;
+const ENTRIES = ENTRIES_FIXTURE;
 
 describe("checkAnswer", () => {
   it("returns correct when name matches first entry", () => {
