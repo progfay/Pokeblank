@@ -45,11 +45,15 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
         error = 'カタカナで入力してください';
         return;
       }
-      error = null;
       matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
       const result = checkAnswer(validated, matchingEntries);
-      wasCorrect = result.kind === 'correct';
-      matchedEntry = result.kind === 'correct' ? result.matchedPokemon : null;
+      if (result.kind === 'incorrect') {
+        error = 'ちがいます';
+        return;
+      }
+      error = null;
+      wasCorrect = true;
+      matchedEntry = result.matchedPokemon;
       mode = 'answer';
     },
 

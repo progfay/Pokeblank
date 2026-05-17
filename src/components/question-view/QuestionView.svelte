@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from 'svelte';
   import type { Question } from '../../lib/quiz/question.ts';
   import InputField from './InputField.svelte';
   import Letter from './Letter.svelte';
@@ -29,7 +30,7 @@
 
   $effect(() => {
     if (error) {
-      shakeKey += 1;
+      untrack(() => { shakeKey += 1; });
     }
   });
 
