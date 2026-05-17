@@ -1,4 +1,5 @@
 import { segment } from "../text/segment.ts";
+import { shuffleIndices } from "./shuffle.ts";
 
 export type Letter = {
   readonly kind: "masked" | "revealed";
@@ -24,12 +25,7 @@ export function generateQuestion(entry: PokedexEntry): Question {
   const maxRevealed = Math.floor(total / 2);
   const revealedCount = Math.floor(Math.random() * maxRevealed) + 1;
 
-  const indices = Array.from({ length: total }, (_, i) => i);
-  for (let i = indices.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [indices[i], indices[j]] = [indices[j], indices[i]];
-  }
-  const revealedSet = new Set(indices.slice(0, revealedCount));
+  const revealedSet = new Set(shuffleIndices(total).slice(0, revealedCount));
 
   return {
     letters: graphemes.map((value, i) => ({
