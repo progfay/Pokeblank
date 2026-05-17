@@ -1,5 +1,6 @@
 import { normalize } from '../text/normalize.ts';
 import { validate } from '../text/validation.ts';
+import { MESSAGES } from '../constants/messages.ts';
 import {
   generateQuestion,
   pickRandomPokemon,
@@ -13,6 +14,10 @@ import { findAllMatchingPokedexEntries } from '../quiz/matching.ts';
 export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: readonly string[]) {
   function newRound(): Question {
     return generateQuestion(pickRandomPokemon(pokedex));
+  }
+
+  function resolveMatches() {
+    return findAllMatchingPokedexEntries(pokedex, question);
   }
 
   let mode = $state<'question' | 'answer'>('question');
@@ -39,18 +44,18 @@ export function createQuizStore(pokedex: readonly PokedexEntry[], specialChars: 
       const normalized = normalize(rawInput);
       const validated = validate(normalized, specialChars);
       if (validated === null) {
-        error = 'カタカナで入力してください';
+        error = MESSAGES.ERROR_INVALID_INPUT;
         return;
       }
       error = null;
-      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
+      matchingEntries = resolveMatches();
       const result = checkAnswer(validated, matchingEntries);
       wasCorrect = result.kind === 'correct';
       mode = 'answer';
     },
 
     handlePass() {
-      matchingEntries = findAllMatchingPokedexEntries(pokedex, question);
+      matchingEntries = resolveMatches();
       wasCorrect = false;
       mode = 'answer';
     },
