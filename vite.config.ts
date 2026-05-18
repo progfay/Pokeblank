@@ -3,7 +3,7 @@ import { playwright } from "vite-plus/test/browser-playwright";
 import { defineConfig } from "vite-plus";
 
 export default defineConfig({
-  plugins: [svelte()],
+  plugins: [svelte({ configFile: false })],
   base: "/Pokeblank/",
   fmt: {
     ignorePatterns: ["src/data/**"],
@@ -19,7 +19,7 @@ export default defineConfig({
         },
       },
       {
-        plugins: [svelte()],
+        plugins: [svelte({ configFile: false })],
         test: {
           name: "browser",
           include: ["src/**/*.svelte.test.ts"],
