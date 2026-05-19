@@ -68,8 +68,8 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
 
     handleSubmit() {
       const normalized = normalize(rawInput);
-      const { all, strict: strictEntries } = findMatchingEntries(segmentedPokedex, question);
-      const result = checkAnswer(normalized, nameSet, strictEntries);
+      const { all } = findMatchingEntries(segmentedPokedex, question);
+      const result = checkAnswer(normalized, nameSet, all);
       if (result.kind === "not-a-pokemon") {
         error = "未知のポケモンです";
         return;
