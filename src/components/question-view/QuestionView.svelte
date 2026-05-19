@@ -4,6 +4,8 @@
   import InputField from './InputField.svelte';
   import Letter from './Letter.svelte';
 
+  const base = import.meta.env.BASE_URL;
+
   interface Props {
     question: Question;
     rawInput: string;
@@ -96,16 +98,11 @@
       </svg>
       隠れてる文字をタップするとヒントが見れるよ
     </p>
-    <div class="credit">
-      <p>ポケットモンスター・ポケモン・Pokémonは<a href="https://www.nintendo.co.jp/" target="_blank" rel="noopener noreferrer">任天堂</a>・<a href="http://www.creatures.co.jp/" target="_blank" rel="noopener noreferrer">クリーチャーズ</a>・<a href="http://www.gamefreak.co.jp/" target="_blank" rel="noopener noreferrer">ゲームフリーク</a>の登録商標です。</p>
-      <p>当サイトは個人ファンサイトであり、<a href="http://www.pokemon.co.jp/" target="_blank" rel="noopener noreferrer">株式会社ポケモン</a>他企業様とは一切関係ありません。</p>
-      <p>©&nbsp;2026&nbsp;<a href="https://github.com/progfay" target="_blank" rel="noopener noreferrer">progfay</a></p>
-    </div>
   </div>
 </main>
 
 <header class="topbar">
-  <span class="brand">Pokéblank</span>
+  <h1 class="brand"><a href={base}>Pokéblank</a></h1>
   <button class="btn btn-ghost btn-sm" onclick={onpass} aria-label="Skip">
     <!-- Lucide skip-forward, stroke 1.5 -->
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -196,23 +193,12 @@
     color: var(--color-text-muted);
   }
 
-  .credit {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    text-align: center;
-    font-size: 10px;
-    line-height: 1.6;
-    color: var(--color-text-subtle);
-  }
-
-  .credit p {
+  h1.brand {
     margin: 0;
-  }
 
-  .credit a {
-    color: inherit;
-    text-decoration: underline;
-    text-underline-offset: 2px;
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
   }
 </style>

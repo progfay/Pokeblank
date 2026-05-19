@@ -2,6 +2,8 @@
   import type { Question, PokedexEntry } from '../../lib/quiz/question.ts';
   import PokedexLink from './PokedexLink.svelte';
 
+  const base = import.meta.env.BASE_URL;
+
   interface Props {
     question: Question;
     matchingEntries: readonly PokedexEntry[];
@@ -14,7 +16,7 @@
 </script>
 
 <header class="topbar">
-  <span class="brand">Pokéblank</span>
+  <h1 class="brand"><a href={base}>Pokéblank</a></h1>
 </header>
 
 <button class="btn btn-ghost next-fab" onclick={onnext} aria-label="次の問題へ">
@@ -155,6 +157,15 @@
     background: var(--color-border-strong);
     border-radius: 9999px;
     border: 2px solid var(--color-bg);
+  }
+
+  h1.brand {
+    margin: 0;
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
   }
 
   .next-fab {
