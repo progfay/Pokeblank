@@ -22,7 +22,13 @@ describe("AnswerView", () => {
     document.body.appendChild(div);
     mount(AnswerView, {
       target: div,
-      props: { question, matchingEntries: entries, wasCorrect: true, matchedEntry: entries[0], onnext: vi.fn() },
+      props: {
+        question,
+        matchingEntries: entries,
+        wasCorrect: true,
+        matchedEntry: entries[0],
+        onnext: vi.fn(),
+      },
     });
     expect(div.textContent).toContain("Correct");
     div.remove();
@@ -33,7 +39,13 @@ describe("AnswerView", () => {
     document.body.appendChild(div);
     mount(AnswerView, {
       target: div,
-      props: { question, matchingEntries: entries, wasCorrect: false, matchedEntry: null, onnext: vi.fn() },
+      props: {
+        question,
+        matchingEntries: entries,
+        wasCorrect: false,
+        matchedEntry: null,
+        onnext: vi.fn(),
+      },
     });
     expect(div.textContent).toContain("Skipped");
     div.remove();
@@ -44,7 +56,13 @@ describe("AnswerView", () => {
     document.body.appendChild(div);
     mount(AnswerView, {
       target: div,
-      props: { question, matchingEntries: entries, wasCorrect: true, matchedEntry: entries[0], onnext: vi.fn() },
+      props: {
+        question,
+        matchingEntries: entries,
+        wasCorrect: true,
+        matchedEntry: entries[0],
+        onnext: vi.fn(),
+      },
     });
     expect(div.querySelectorAll("li")).toHaveLength(entries.length);
     div.remove();
@@ -55,7 +73,13 @@ describe("AnswerView", () => {
     document.body.appendChild(div);
     mount(AnswerView, {
       target: div,
-      props: { question, matchingEntries: entries, wasCorrect: true, matchedEntry: entries[0], onnext: vi.fn() },
+      props: {
+        question,
+        matchingEntries: entries,
+        wasCorrect: true,
+        matchedEntry: entries[0],
+        onnext: vi.fn(),
+      },
     });
     expect(div.textContent).toContain("フシギダネ");
     expect(div.textContent).toContain("フシギソウ");
@@ -70,7 +94,8 @@ describe("AnswerView", () => {
       target: div,
       props: { question, matchingEntries: entries, wasCorrect: false, matchedEntry: null, onnext },
     });
-    div.querySelector<HTMLButtonElement>('[aria-label="次の問題へ"]')!
+    div
+      .querySelector<HTMLButtonElement>('[aria-label="次の問題へ"]')!
       .dispatchEvent(new MouseEvent("click", { bubbles: true }));
     expect(onnext).toHaveBeenCalled();
     div.remove();

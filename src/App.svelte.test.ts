@@ -38,17 +38,20 @@ describe("App", () => {
   });
 
   it("shows Skipped after clicking Skip", () => {
-    div.querySelector<HTMLButtonElement>('[aria-label="Skip"]')!
+    div
+      .querySelector<HTMLButtonElement>('[aria-label="Skip"]')!
       .dispatchEvent(new MouseEvent("click", { bubbles: true }));
     flushSync();
     expect(div.textContent).toContain("Skipped");
   });
 
   it("returns to question view after Next from answer view", () => {
-    div.querySelector<HTMLButtonElement>('[aria-label="Skip"]')!
+    div
+      .querySelector<HTMLButtonElement>('[aria-label="Skip"]')!
       .dispatchEvent(new MouseEvent("click", { bubbles: true }));
     flushSync();
-    div.querySelector<HTMLButtonElement>('[aria-label="次の問題へ"]')!
+    div
+      .querySelector<HTMLButtonElement>('[aria-label="次の問題へ"]')!
       .dispatchEvent(new MouseEvent("click", { bubbles: true }));
     flushSync();
     expect(div.querySelector("input")).not.toBeNull();
@@ -73,7 +76,8 @@ describe("App", () => {
 
   it("reveals a letter when masked tile is clicked", () => {
     const before = div.querySelectorAll('[aria-label="ヒントを開示"]').length;
-    div.querySelector<HTMLButtonElement>('[aria-label="ヒントを開示"]')!
+    div
+      .querySelector<HTMLButtonElement>('[aria-label="ヒントを開示"]')!
       .dispatchEvent(new MouseEvent("click", { bubbles: true }));
     flushSync();
     const after = div.querySelectorAll('[aria-label="ヒントを開示"]').length;

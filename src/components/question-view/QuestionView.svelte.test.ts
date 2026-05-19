@@ -106,7 +106,8 @@ describe("QuestionView", () => {
         onreveal: vi.fn(),
       },
     });
-    div.querySelector<HTMLButtonElement>('[aria-label="Skip"]')!
+    div
+      .querySelector<HTMLButtonElement>('[aria-label="Skip"]')!
       .dispatchEvent(new MouseEvent("click", { bubbles: true }));
     expect(onpass).toHaveBeenCalled();
     div.remove();
@@ -129,7 +130,8 @@ describe("QuestionView", () => {
       },
     });
     // index 0 (フ) は revealed なので buttons なし。最初の masked button は index 1 (シ)
-    div.querySelector<HTMLButtonElement>('[aria-label="ヒントを開示"]')!
+    div
+      .querySelector<HTMLButtonElement>('[aria-label="ヒントを開示"]')!
       .dispatchEvent(new MouseEvent("click", { bubbles: true }));
     expect(onreveal).toHaveBeenCalledWith(1);
     div.remove();
@@ -151,7 +153,8 @@ describe("QuestionView", () => {
         onreveal: vi.fn(),
       },
     });
-    div.querySelector<HTMLButtonElement>('[aria-label="解答を送信"]')!
+    div
+      .querySelector<HTMLButtonElement>('[aria-label="解答を送信"]')!
       .dispatchEvent(new MouseEvent("click", { bubbles: true }));
     expect(onsubmit).toHaveBeenCalled();
     div.remove();

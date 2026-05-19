@@ -1,15 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import { segment } from "../text/segment.ts";
-import { matchesPattern, segmentPokedex } from "./matching.ts";
+import { matchesPattern } from "./matching.ts";
 import { generateQuestion } from "./question.ts";
-
-const POKEDEX = [
-  [25, "ピカチュウ"],
-  [26, "ライチュウ"],
-  [1, "フシギダネ"],
-] as const;
-
-const SEGMENTED_POKEDEX = segmentPokedex(POKEDEX);
 
 describe("matchesPattern", () => {
   it("source pokemon always matches its own question", () => {

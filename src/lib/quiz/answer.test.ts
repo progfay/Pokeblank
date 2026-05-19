@@ -9,10 +9,7 @@ const ENTRIES = [
   [26, "ライチュウ"],
 ] as const;
 
-const POKEDEX = [
-  [1, "フシギダネ"],
-  ...ENTRIES,
-] as const;
+const POKEDEX = [[1, "フシギダネ"], ...ENTRIES] as const;
 
 const NAME_SET = new Set(POKEDEX.map(([, name]) => name));
 

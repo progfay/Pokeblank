@@ -1,7 +1,7 @@
-import { segment } from '../text/segment.ts';
-import type { Pokedex, PokedexEntry, Question } from '../quiz/question.ts';
+import { segment } from "../text/segment.ts";
+import type { Pokedex, PokedexEntry, Question } from "../quiz/question.ts";
 
-const CHARS = 'q8bU_sHzY3fRmGkD6cNvJwA0e5TlPi7aOXxnhjV4BgKrWo2EI9dZMtSFuLCpQy-';
+const CHARS = "q8bU_sHzY3fRmGkD6cNvJwA0e5TlPi7aOXxnhjV4BgKrWo2EI9dZMtSFuLCpQy-";
 
 function toBase64n(n: number): string {
   return CHARS[Math.floor(n / 4096)] + CHARS[Math.floor(n / 64) % 64] + CHARS[n % 64];
@@ -21,7 +21,7 @@ function fromBase64n(s: string): number | null {
 export function encodeQuestion(pokedexNumber: number, question: Question): string {
   let mask = 0;
   for (let i = 0; i < question.letters.length; i++) {
-    if (question.letters[i].kind === 'revealed') mask |= 1 << i;
+    if (question.letters[i].kind === "revealed") mask |= 1 << i;
   }
   const value = (mask << 11) | (pokedexNumber - 1);
   return toBase64n(value);
@@ -49,7 +49,7 @@ export function decodeQuestion(
     entry,
     question: {
       letters: graphemes.map((value, i) => ({
-        kind: mask & (1 << i) ? 'revealed' : 'masked',
+        kind: mask & (1 << i) ? "revealed" : "masked",
         value,
       })),
     },
