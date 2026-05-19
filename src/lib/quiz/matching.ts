@@ -13,13 +13,11 @@ export function segmentPokedex(pokedex: Pokedex): readonly SegmentedEntry[] {
 export function matchesPattern(
   candidateGraphemes: readonly string[],
   question: Question,
-  strict = false,
 ): boolean {
   const { letters } = question;
   if (candidateGraphemes.length !== letters.length) return false;
   return letters.every((letter, i) => {
     if (letter.kind === "revealed") return candidateGraphemes[i] === letter.value;
-    if (strict && letter.kind === "hint-revealed") return candidateGraphemes[i] === letter.value;
     return true;
   });
 }
@@ -27,13 +25,8 @@ export function matchesPattern(
 export function findMatchingEntries(
   segmentedPokedex: readonly SegmentedEntry[],
   question: Question,
-): { all: readonly PokedexEntry[]; strict: readonly PokedexEntry[] } {
-  const all: PokedexEntry[] = [];
-  const strict: PokedexEntry[] = [];
-  for (const { graphemes, entry } of segmentedPokedex) {
-    if (!matchesPattern(graphemes, question)) continue;
-    all.push(entry);
-    if (matchesPattern(graphemes, question, true)) strict.push(entry);
-  }
-  return { all, strict };
+): readonly PokedexEntry[] {
+  return segmentedPokedex
+    .filter(({ graphemes }) => matchesPattern(graphemes, question))
+    .map(({ entry }) => entry);
 }

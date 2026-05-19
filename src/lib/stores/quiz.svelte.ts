@@ -68,8 +68,8 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
 
     handleSubmit() {
       const normalized = normalize(rawInput);
-      const { all } = findMatchingEntries(segmentedPokedex, question);
-      const result = checkAnswer(normalized, nameSet, all);
+      const matchingAll = findMatchingEntries(segmentedPokedex, question);
+      const result = checkAnswer(normalized, nameSet, matchingAll);
       if (result.kind === "not-a-pokemon") {
         error = "未知のポケモンです";
         return;
@@ -79,14 +79,14 @@ export function createQuizStore(pokedex: readonly PokedexEntry[]) {
         return;
       }
       error = null;
-      matchingEntries = all;
+      matchingEntries = matchingAll;
       wasCorrect = true;
       matchedEntry = result.matchedPokemon;
       mode = "answer";
     },
 
     handlePass() {
-      matchingEntries = findMatchingEntries(segmentedPokedex, question).all;
+      matchingEntries = findMatchingEntries(segmentedPokedex, question);
       wasCorrect = false;
       matchedEntry = null;
       mode = "answer";
