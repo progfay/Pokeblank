@@ -10,10 +10,7 @@ export function segmentPokedex(pokedex: Pokedex): readonly SegmentedEntry[] {
   return pokedex.map((entry) => ({ entry, graphemes: segment(entry[1]) }));
 }
 
-export function matchesPattern(
-  candidateGraphemes: readonly string[],
-  question: Question,
-): boolean {
+export function matchesPattern(candidateGraphemes: readonly string[], question: Question): boolean {
   const { letters } = question;
   if (candidateGraphemes.length !== letters.length) return false;
   return letters.every((letter, i) => {

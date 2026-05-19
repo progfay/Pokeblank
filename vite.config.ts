@@ -5,6 +5,14 @@ import { defineConfig } from "vite-plus";
 export default defineConfig({
   plugins: [svelte({ configFile: false })],
   base: "/Pokeblank/",
+  build: {
+    rollupOptions: {
+      input: {
+        main: "index.html",
+        endless: "endless/index.html",
+      },
+    },
+  },
   fmt: {
     ignorePatterns: ["src/data/**"],
   },
