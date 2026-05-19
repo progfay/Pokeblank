@@ -15,10 +15,6 @@
   let { question, matchingEntries, wasCorrect, matchedEntry, onnext }: Props = $props();
 </script>
 
-<header class="topbar">
-  <h1 class="brand"><a href={base}>Pokéblank</a></h1>
-</header>
-
 <button class="btn btn-ghost next-fab" onclick={onnext} aria-label="次の問題へ">
   <span>Next</span>
   <!-- Lucide arrow-right, stroke 1.5 -->
@@ -27,6 +23,10 @@
     <polyline points="12 5 19 12 12 19"></polyline>
   </svg>
 </button>
+
+<header class="topbar">
+  <h1 class="brand"><a href={base}>Pokéblank</a></h1>
+</header>
 
 <main class="result-body">
   <div class="verdict">
