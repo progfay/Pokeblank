@@ -17,8 +17,5 @@
     "svelte": "5.55.7",
     "vite-plus": "0.1.21"
   },
-  "overrides": {
-    "vite": "npm:@voidzero-dev/vite-plus-core@0.1.21",
-    "vitest": "npm:@voidzero-dev/vite-plus-test@0.1.21"
-  }
+  "packageManager": "pnpm@11.0.8"
 }
