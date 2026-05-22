@@ -13,7 +13,26 @@
   }
 
   let { question, matchingEntries, wasCorrect, matchedEntry, onnext }: Props = $props();
+
+  const canShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
+
+  function handleShare() {
+    const pattern = question.letters.map(l => l.kind === 'masked' ? '◯' : l.value).join('');
+    const text = `このポケモンは？\n\n${pattern}\n\n${window.location.href}`;
+    navigator.share({ title: 'Pokéblank', text, url: window.location.href });
+  }
 </script>
+
+{#if canShare}
+  <button class="btn btn-ghost share-fab" onclick={handleShare} aria-label="共有">
+    <!-- Lucide share, stroke 1.5 -->
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+      <polyline points="16 6 12 2 8 6"/>
+      <line x1="12" y1="2" x2="12" y2="15"/>
+    </svg>
+  </button>
+{/if}
 
 <button class="btn btn-ghost next-fab" onclick={onnext} aria-label="次の問題へ">
   <span>Next</span>
@@ -176,5 +195,14 @@
     padding: 0 var(--space-4);
     font-size: var(--text-body-size);
     font-weight: var(--font-weight-medium);
+  }
+
+  .share-fab {
+    position: absolute;
+    left: var(--space-4);
+    bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+    width: 44px;
+    height: 44px;
+    padding: 0;
   }
 </style>
