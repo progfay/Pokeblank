@@ -3,6 +3,7 @@
   import type { Question } from '../../lib/quiz/question.ts';
   import InputField from './InputField.svelte';
   import Letter from './Letter.svelte';
+  import { Send, AlertCircle, Lightbulb, SkipForward } from '@lucide/svelte';
 
   const base = import.meta.env.BASE_URL;
 
@@ -51,22 +52,13 @@
         disabled={!canSubmit}
         aria-label="解答を送信"
       >
-        <!-- Lucide send, stroke 1.5 -->
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M22 2 11 13"></path>
-          <path d="M22 2 15 22l-4-9-9-4 20-7Z"></path>
-        </svg>
+        <Send size={18} strokeWidth={1.5} />
       </button>
     </div>
 
     <p class="answer-feedback" class:is-shown={!!error} role="alert" aria-live="polite">
       {#if error}
-        <!-- Lucide alert-circle, stroke 2 -->
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="12"></line>
-          <line x1="12" y1="16" x2="12.01" y2="16"></line>
-        </svg>
+        <AlertCircle size={14} strokeWidth={2} aria-hidden="true" />
         <span>{error}</span>
       {:else}
         &nbsp;
@@ -89,12 +81,7 @@
   </div>
 
   <p class="tip">
-    <!-- Lucide lightbulb, stroke 1.5 -->
-    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--color-info-fg)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path>
-      <path d="M9 18h6"></path>
-      <path d="M10 22h4"></path>
-    </svg>
+    <Lightbulb size={12} strokeWidth={1.5} color="var(--color-info-fg)" aria-hidden="true" />
     隠れてる文字をタップするとヒントが見れるよ
   </p>
 </main>
@@ -107,11 +94,7 @@
     </a>
   </h1>
   <button class="btn btn-ghost btn-sm" onclick={onpass} aria-label="Skip">
-    <!-- Lucide skip-forward, stroke 1.5 -->
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <polygon points="5 4 15 12 5 20 5 4"></polygon>
-      <line x1="19" y1="4" x2="19" y2="20"></line>
-    </svg>
+    <SkipForward size={14} strokeWidth={1.5} />
     <span>Skip</span>
   </button>
 </header>
@@ -177,7 +160,7 @@
     visibility: visible;
   }
 
-  .answer-feedback svg {
+  .answer-feedback :global(svg) {
     flex-shrink: 0;
   }
 

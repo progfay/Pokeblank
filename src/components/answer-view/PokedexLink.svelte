@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { PokedexEntry } from '../../lib/quiz/question.ts';
   import { pokedexUrl } from '../../lib/pokemon/pokedex-url.ts';
+  import { ExternalLink } from '@lucide/svelte';
 
   interface Props {
     entry: PokedexEntry;
@@ -17,12 +18,7 @@
   <span class="match-num">{num}</span>
   <span class="match-name">{entry[1]}</span>
   <span class="match-ext" aria-hidden="true">
-    <!-- Lucide external-link, stroke 1.5 -->
-    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M15 3h6v6"></path>
-      <line x1="10" y1="14" x2="21" y2="3"></line>
-      <path d="M21 14v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5"></path>
-    </svg>
+    <ExternalLink size={13} strokeWidth={1.5} />
   </span>
 </a>
 
