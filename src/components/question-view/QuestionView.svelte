@@ -100,7 +100,12 @@
 </main>
 
 <header class="topbar">
-  <h1 class="brand"><a href={base}>Pokéblank</a></h1>
+  <h1 class="brand">
+    <a href={base}>
+      <img src="{base}logo.svg" alt="" class="brand-icon" aria-hidden="true" />
+      Pokéblank
+    </a>
+  </h1>
   <button class="btn btn-ghost btn-sm" onclick={onpass} aria-label="Skip">
     <!-- Lucide skip-forward, stroke 1.5 -->
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
@@ -193,6 +198,14 @@
     a {
       color: inherit;
       text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
     }
+  }
+
+  .brand-icon {
+    height: 1em;
+    width: auto;
   }
 </style>

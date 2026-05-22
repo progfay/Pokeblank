@@ -4,7 +4,10 @@
 
 <div class="screen">
   <main class="content">
-    <h1 class="logo">Pokéblank</h1>
+    <h1 class="logo">
+      <img src="{base}logo.svg" alt="" class="logo-icon" aria-hidden="true" />
+      Pokéblank
+    </h1>
     <a href="{base}endless/" class="btn btn-primary btn-lg">Endless Mode</a>
   </main>
   <footer class="credit">
@@ -35,6 +38,14 @@
     font-weight: 700;
     letter-spacing: var(--tracking-tight);
     color: var(--color-text);
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+  }
+
+  .logo-icon {
+    height: 1em;
+    width: auto;
   }
 
   .credit {

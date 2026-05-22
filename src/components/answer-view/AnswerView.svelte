@@ -44,7 +44,12 @@
 </button>
 
 <header class="topbar">
-  <h1 class="brand"><a href={base}>Pokéblank</a></h1>
+  <h1 class="brand">
+    <a href={base}>
+      <img src="{base}logo.svg" alt="" class="brand-icon" aria-hidden="true" />
+      Pokéblank
+    </a>
+  </h1>
 </header>
 
 <main class="result-body">
@@ -184,7 +189,15 @@
     a {
       color: inherit;
       text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.4em;
     }
+  }
+
+  .brand-icon {
+    height: 1em;
+    width: auto;
   }
 
   .next-fab {
