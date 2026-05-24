@@ -28,7 +28,9 @@ jobs:
           node-version-file: .node-version
           run-install: true
 
-      - run: pnpm run build
+      - run: vp env on
+
+      - run: vp run build
 
       - uses: actions/upload-pages-artifact@v3
         with:
