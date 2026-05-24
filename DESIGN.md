@@ -9,7 +9,7 @@
 | フレームワーク       | Svelte 5（Runes）              |
 | 言語                 | TypeScript                     |
 | ツールチェイン       | Vite+                          |
-| パッケージマネージャ | npm                            |
+| パッケージマネージャ | pnpm                           |
 | ホスティング         | GitHub Pages                   |
 | CI/CD                | GitHub Actions（デプロイのみ） |
 
@@ -25,7 +25,7 @@
 ### 1.3 CSS
 
 - Svelte 標準のコンポーネント scoped CSS
-- 共通変数が必要な場合は `App.svelte` の `:global()` または `app.css` で定義
+- グローバルスタイル（CSS カスタムプロパティ・共通クラス）は `app.css` で定義。`.screen`・`.btn`・`.tile` などの共有クラスはここで管理する
 
 ### 1.4 ブラウザサポート
 
@@ -48,40 +48,50 @@
 .
 ├── .github/workflows/
 │   └── deploy.yml
+├── endless/
+│   └── index.html
 ├── public/
 ├── scripts/
 │   └── fetch-pokemon.ts
 ├── src/
 │   ├── App.svelte
+│   ├── TopPage.svelte
+│   ├── app.css
+│   ├── home-main.ts
 │   ├── main.ts
 │   ├── components/
 │   │   ├── question-view/
 │   │   │   ├── QuestionView.svelte
 │   │   │   ├── Letter.svelte
-│   │   │   ├── InputField.svelte
-│   │   │   └── SpecialKeyboard.svelte
+│   │   │   └── InputField.svelte
 │   │   └── answer-view/
 │   │       ├── AnswerView.svelte
 │   │       └── PokedexLink.svelte
 │   ├── data/
 │   │   ├── pokedex.json
-│   │   ├── pokedex.json.d.ts
-│   │   ├── special-chars.json
-│   │   └── special-chars.json.d.ts
+│   │   └── pokedex.json.d.ts
 │   └── lib/
+│       ├── pokemon/
+│       │   └── pokedex-url.ts
+│       ├── stores/
+│       │   └── quiz.svelte.ts
 │       ├── text/
 │       │   ├── segment.ts
-│       │   ├── normalize.ts
-│       │   ├── validation.ts
-│       │   └── special-chars.ts
+│       │   └── normalize.ts
+│       ├── url/
+│       │   └── query.ts
 │       └── quiz/
 │           ├── question.ts
 │           ├── matching.ts
-│           └── answer.ts
+│           ├── answer.ts
+│           └── shuffle.ts
+├── .node-version
+├── index.html
 ├── package.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
 ├── tsconfig.json
-├── vite.config.ts
-└── vitest.config.ts
+└── vite.config.ts
 ```
 
 ### 2.2 リポジトリの性質
@@ -89,9 +99,18 @@
 - 単一パッケージのリポジトリ
 - monorepo ではない
 
-### 2.3 npm scripts
+### 2.3 pnpm scripts
 
-- `npm run generate:pokedex`: PokéAPI からデータを取得し、`src/data/` 配下のファイルを生成
+- `pnpm run generate:pokedex`: PokéAPI からデータを取得し、`src/data/` 配下のファイルを生成
+
+### 2.4 マルチページ構成
+
+Vite の `rollupOptions.input` で 2 エントリポイントをビルドする:
+
+| エントリ  | HTML                 | エントリポイント   | マウント対象     |
+| --------- | -------------------- | ------------------ | ---------------- |
+| `main`    | `index.html`         | `src/home-main.ts` | `TopPage.svelte` |
+| `endless` | `endless/index.html` | `src/main.ts`      | `App.svelte`     |
 
 ---
 
@@ -118,57 +137,34 @@
 
 #### 3.4.1 `src/data/pokedex.json`
 
-minify 形式のタプル配列:
+minify 形式の文字列配列（図鑑番号順、インデックス 0 が図鑑番号 1 に対応）:
 
 ```json
-[[1,"フシギダネ"],[2,"フシギソウ"],[3,"フシギバナ"],...]
+["フシギダネ","フシギソウ","フシギバナ",...]
 ```
 
-各要素は `[図鑑番号, 名前]` のタプル、図鑑番号順にソート。
+フェッチ時にスクリプト内で `id === index + 1` の連番性を検証する。
 
 #### 3.4.2 `src/data/pokedex.json.d.ts`
 
-相対パス指定、静的型定義:
-
 ```typescript
 declare module "./pokedex.json" {
-  export type PokedexEntry = readonly [pokedexNumber: number, name: string];
-  const pokedex: readonly PokedexEntry[];
+  const pokedex: readonly string[];
   export default pokedex;
-}
-```
-
-#### 3.4.3 `src/data/special-chars.json`
-
-全ポケモン名から集めた特殊文字（ひらがな・カタカナ以外）の配列、Unicode コードポイント順:
-
-```json
-["2", ":", "Z", "♀", "♂"]
-```
-
-#### 3.4.4 `src/data/special-chars.json.d.ts`
-
-```typescript
-declare module "./special-chars.json" {
-  const specialChars: readonly string[];
-  export default specialChars;
 }
 ```
 
 ### 3.5 Git 管理
 
 - `pokedex.json` および `pokedex.json.d.ts` はリポジトリにコミット
-- `special-chars.json` および `special-chars.json.d.ts` も同様にコミット
 
 ### 3.6 スクリプトの責務
 
 1. PokéAPI GraphQL から `pokemon-species` を取得
-2. `[pokedexNumber, name]` のタプル配列に整形、図鑑番号順にソート
-3. 全名前を grapheme 分割し、特殊文字を集めて重複排除、Unicode コードポイント順にソート
+2. 図鑑番号の連番性を検証（`id !== index + 1` の場合 exit code 1）
+3. 名前のみの文字列配列に整形、図鑑番号順にソート
 4. `src/data/pokedex.json` を書き出し（minify、`JSON.stringify` のみ）
 5. `src/data/pokedex.json.d.ts` をテンプレート文字列で組み立てて書き出し
-6. `src/data/special-chars.json` を書き出し
-7. `src/data/special-chars.json.d.ts` を書き出し
 
 ファイル書き出しには `node:fs/promises` の `writeFile` を使用。
 
@@ -184,10 +180,6 @@ declare module "./special-chars.json" {
 // src/lib/text/normalize.ts
 declare const normalizedBrand: unique symbol;
 export type Normalized = string & { readonly [normalizedBrand]: true };
-
-// src/lib/text/validation.ts
-declare const validatedBrand: unique symbol;
-export type ValidatedInput = Normalized & { readonly [validatedBrand]: true };
 ```
 
 #### 4.1.2 クイズ
@@ -195,7 +187,7 @@ export type ValidatedInput = Normalized & { readonly [validatedBrand]: true };
 ```typescript
 // src/lib/quiz/question.ts
 export type Letter = {
-  readonly kind: "masked" | "revealed";
+  readonly kind: "masked" | "revealed" | "hint-revealed";
   readonly value: string;
 };
 
@@ -203,10 +195,26 @@ export type Question = {
   readonly letters: readonly Letter[];
 };
 
+export type PokedexEntry = readonly [pokedexNumber: number, name: string];
+export type Pokedex = readonly PokedexEntry[];
+
 // src/lib/quiz/answer.ts
 export type AnswerResult =
   | { kind: "correct"; matchedPokemon: PokedexEntry }
+  | { kind: "not-a-pokemon" }
   | { kind: "incorrect" };
+
+// src/lib/quiz/matching.ts
+export type SegmentedEntry = {
+  readonly entry: PokedexEntry;
+  readonly graphemes: readonly string[];
+};
+```
+
+`PokedexEntry` は `pokedex.json`（文字列配列）から以下のように生成する:
+
+```typescript
+const pokedex: readonly PokedexEntry[] = pokedexData.map((name, i) => [i + 1, name] as const);
 ```
 
 ### 4.2 関数シグネチャ
@@ -218,55 +226,75 @@ export function segment(text: string): readonly string[];
 // text/normalize
 export function normalize(raw: string): Normalized;
 
-// text/validation
-export function validate(
-  normalized: Normalized,
-  allowedSpecialChars: readonly string[],
-): ValidatedInput | null;
-
-// text/special-chars
-export function isSpecialChar(grapheme: string): boolean;
-
 // quiz/question
 export function pickRandomPokemon(pokedex: Pokedex): PokedexEntry;
 export function generateQuestion(entry: PokedexEntry): Question;
 // 2 文字未満の場合は Error をスロー
 export function withRevealed(question: Question, letterIndex: number): Question;
 
+// quiz/shuffle
+export function shuffleIndices(total: number): number[];
+
 // quiz/matching
+export function segmentPokedex(pokedex: Pokedex): readonly SegmentedEntry[];
 export function matchesPattern(candidateGraphemes: readonly string[], question: Question): boolean;
-export function findAllMatchingPokedexEntries(
-  pokedex: Pokedex,
+export function findMatchingEntries(
+  segmentedPokedex: readonly SegmentedEntry[],
   question: Question,
 ): readonly PokedexEntry[];
 
 // quiz/answer
 export function checkAnswer(
-  input: ValidatedInput,
+  input: Normalized,
+  nameSet: ReadonlySet<string>,
   matchingEntries: readonly PokedexEntry[],
 ): AnswerResult;
+
+// pokemon/pokedex-url
+export function pokedexUrl(pokedexNumber: number): string;
+
+// url/query
+export function encodeQuestion(pokedexNumber: number, question: Question): string;
+export function decodeQuestion(
+  encoded: string,
+  pokedex: Pokedex,
+): { entry: PokedexEntry; question: Question } | null;
 ```
 
 ### 4.3 設計原則
 
 - コアロジックは純粋関数のみ
-- リアクティブな状態管理は UI 層（Svelte Runes）が担う
+- リアクティブな状態管理は `quiz.svelte.ts` ストアが担う
 
 ### 4.4 乱数の扱い
 
 - `Math.random` を直接使用
 - テスト時は `vi.spyOn(Math, 'random').mockReturnValue(...)` でモック
 
-### 4.5 特殊文字の判定
+### 4.5 文字列正規化
 
-- ひらがな（U+3040〜U+309F）、カタカナ（U+30A0〜U+30FF）以外を特殊文字とみなす
-- `isSpecialChar` 関数は `src/lib/text/special-chars.ts` に配置
-- データ取得スクリプトからもこの関数を使用
-
-### 4.6 文字列正規化
-
-- 文字コードシフトによってひらがなをカタカナに変換
+- ひらがな → カタカナ: 文字コードシフト（`+0x60`）
+- 半角 ASCII 印字可能文字（`!-~`）→ 全角大文字: `toUpperCase` ＋ 文字コードシフト（`+0xFEE0`）
 - 関数名・型名から「ひらがな」「カタカナ」という言葉を排除し、「正規化」という抽象で表現
+
+### 4.6 マッチング判定
+
+- `matchesPattern` は `"revealed"` の文字のみを照合する（`"hint-revealed"` は照合対象外）
+- 答え合わせ画面に表示する「該当ポケモン」は、ヒントで開示した文字を含まない元の穴パターンに基づく
+
+### 4.7 URL 保存
+
+出題情報を 17 bit の整数値にパックし、自作 64 進数で 3 文字にエンコード:
+
+```
+value = (revealed_mask << 11) | (pokedex_number - 1)
+```
+
+- bit 0–10: 図鑑番号 − 1
+- bit 11–16: revealed ビットマスク（`"revealed"` の位置のみ、`"hint-revealed"` は含めない）
+- 文字セット: URL-safe な 64 文字を独自順序で配置
+- ページ読み込み時に `?q=` パラメータが存在すれば復元し、不正な値の場合はランダムに生成
+- 次の問題への遷移時に `history.replaceState` で上書き
 
 ---
 
@@ -274,7 +302,9 @@ export function checkAnswer(
 
 ### 5.1 画面構成
 
-2 つのモードのみ:
+トップページとエンドレスモードの 2 ページ。
+
+エンドレスモード内には 2 つのモードのみ:
 
 - 出題モード（`'question'`）
 - 答え合わせモード（`'answer'`）
@@ -284,16 +314,14 @@ export function checkAnswer(
 ### 5.2 コンポーネント階層
 
 ```
-App.svelte
-├─ 画面モード切り替え
-├─ pokedex / specialChars の読み込み
-├─ Question の生成と保持
-├─ 状態管理（rawInput, error, matchingEntries）
+TopPage.svelte           ← トップページ（/ ）
+
+App.svelte               ← Endless Mode（/endless/）
+├─ createQuizStore により状態管理
 │
 ├── QuestionView.svelte
 │    ├── Letter.svelte（each で展開）
-│    ├── InputField.svelte
-│    └── SpecialKeyboard.svelte
+│    └── InputField.svelte
 │
 └── AnswerView.svelte
      └── PokedexLink.svelte
@@ -301,51 +329,58 @@ App.svelte
 
 ### 5.3 各コンポーネントの責務
 
-| コンポーネント           | 責務                                                                              |
-| ------------------------ | --------------------------------------------------------------------------------- |
-| `App.svelte`             | アプリ全体、画面モード切り替え、状態の集約                                        |
-| `QuestionView.svelte`    | 出題画面のレイアウト、送信/パスボタン、letters の each 展開                       |
-| `Letter.svelte`          | 1 文字の表示。`revealed` は値を表示、`masked` は `◯` を表示し dblclick で親に通知 |
-| `InputField.svelte`      | 入力欄。Enter で送信イベント発火                                                  |
-| `SpecialKeyboard.svelte` | 全特殊文字を常時表示、ボタン押下で親に通知                                        |
-| `AnswerView.svelte`      | 答え合わせ画面のレイアウト、次の問題ボタン                                        |
-| `PokedexLink.svelte`     | ポケモン名と公式図鑑へのアンカーリンク                                            |
+| コンポーネント        | 責務                                                                                      |
+| --------------------- | ----------------------------------------------------------------------------------------- |
+| `TopPage.svelte`      | トップページ。ロゴ・Endless Mode へのリンク・クレジット表示                               |
+| `App.svelte`          | Endless Mode 全体。`createQuizStore` を呼び出し、画面モード切り替えを担う                 |
+| `QuestionView.svelte` | 出題画面のレイアウト。送信/スキップボタン、letters の each 展開                           |
+| `Letter.svelte`       | 1 文字の表示。`revealed`/`hint-revealed` は値を表示、`masked` はボタン（`◯`）でタップ通知 |
+| `InputField.svelte`   | 入力欄。Enter で送信イベント発火                                                          |
+| `AnswerView.svelte`   | 答え合わせ画面。正誤表示・該当ポケモン一覧・Next / Share ボタン                           |
+| `PokedexLink.svelte`  | ポケモン名と公式図鑑へのアンカーリンク                                                    |
 
 ### 5.4 状態管理
 
-`App.svelte` に集約:
+`src/lib/stores/quiz.svelte.ts` の `createQuizStore` に集約。`$state` Rune を使用:
 
 - `mode: 'question' | 'answer'`
 - `question: Question`
 - `rawInput: string`
 - `error: string | null`
 - `matchingEntries: readonly PokedexEntry[]`
+- `wasCorrect: boolean`
+- `matchedEntry: PokedexEntry | null`
 
-子コンポーネントは props を受け取り、イベントで親に通知する（lift state up パターン）。
+`App.svelte` はストアを呼び出し、子コンポーネントに props を渡す（lift state up パターン）。
 
 ### 5.5 イベントフロー
 
-| ユーザー操作               | 発火元                    | 通知先 | App での処理                                       |
-| -------------------------- | ------------------------- | ------ | -------------------------------------------------- |
-| 入力欄に文字を打つ         | InputField                | App    | `rawInput` を更新                                  |
-| 特殊文字ボタンを押す       | SpecialKeyboard           | App    | `rawInput` に追加                                  |
-| マスク文字をダブルクリック | Letter                    | App    | `withRevealed(question, index)` で更新             |
-| 送信ボタン or Enter        | QuestionView / InputField | App    | normalize → validate → checkAnswer、モード切り替え |
-| パスボタン                 | QuestionView              | App    | matchingEntries を計算、モード切り替え             |
-| 次の問題へ                 | AnswerView                | App    | 新規問題生成、モード切り替え                       |
+| ユーザー操作        | 発火元                    | 通知先      | ストアでの処理                                                                     |
+| ------------------- | ------------------------- | ----------- | ---------------------------------------------------------------------------------- |
+| 入力欄に文字を打つ  | InputField                | App → Store | `rawInput` を更新、`error` をクリア                                                |
+| マスク文字をタップ  | Letter                    | App → Store | `withRevealed(question, index)` で `hint-revealed` に更新                          |
+| 送信ボタン or Enter | QuestionView / InputField | App → Store | normalize → findMatchingEntries → checkAnswer、エラー表示またはモード切り替え      |
+| スキップボタン      | QuestionView              | App → Store | `findMatchingEntries` を計算、`wasCorrect = false`、モード切り替え                 |
+| Next ボタン         | AnswerView                | App → Store | 新規問題生成、URL 更新、モード切り替え                                             |
+| 共有ボタン          | AnswerView                | —           | `navigator.share` で穴パターンと URL を共有（`canShare` が `true` の場合のみ表示） |
 
 ### 5.6 ヒント機能
 
-- ダブルクリックの判定は `dblclick` イベントを使用
+- タップ（`click` イベント）の判定
 - 出題時に決定された「ソースポケモン」（= 出題対象ポケモン）の該当位置の文字を表示
 - 一度開いたヒントは戻せない
 - 使用回数に制限なし
+- ヒントで開示した文字は `"hint-revealed"` として管理し、マッチング判定には含めない
 
 ### 5.7 公式図鑑へのリンク
 
+- URL 生成: `src/lib/pokemon/pokedex-url.ts` の `pokedexUrl(pokedexNumber)` 関数
 - URL 形式: `https://zukan.pokemon.co.jp/detail/{図鑑番号を 4 桁ゼロ埋め}`
-- `PokedexLink.svelte` 内部で生成
 - 答え合わせ画面では画像を表示せず、名前のアンカーリンクのみ
+
+### 5.8 ビジュアルビューポート対応
+
+`App.svelte` で `window.visualViewport` の `resize` / `scroll` イベントを購読し、実際の表示高さ（`vh`）を `$state` で追跡。`.screen` の `height` にインラインスタイルとして適用し、ソフトキーボード表示時のレイアウトズレを防ぐ。
 
 ---
 
@@ -357,7 +392,8 @@ App.svelte
 
 ```typescript
 declare module "./pokedex.json" {
-  // 型定義
+  const pokedex: readonly string[];
+  export default pokedex;
 }
 ```
 
@@ -383,33 +419,35 @@ JSON ファイルと同じディレクトリに `.d.ts` ファイルを配置す
 
 DOM やブラウザ API に依存しないロジックのみ。
 
+- grapheme 分割（`segment`）
 - 穴パターン（letters）生成ロジック
 - マッチングロジック
-- 正規化（ひらがな → カタカナ変換）
-- バリデーション
+- 正規化（ひらがな → カタカナ、半角 ASCII → 全角大文字変換）
 - 正解判定（`checkAnswer`）
-- 該当エントリ抽出（`findAllMatchingPokedexEntries`）
-- 特殊文字判定（`isSpecialChar`）
+- 該当エントリ抽出（`findMatchingEntries`）
+- 図鑑 URL 生成（`pokedexUrl`）
 
 #### 7.1.2 コンポーネント単体テスト（Browser Mode、`.svelte.test.ts`）
 
 Svelte コンポーネントの単体動作。
 
-- `Letter.svelte`: masked/revealed の表示、dblclick で親に通知
-- `InputField.svelte`: 入力 → 値の更新、Enter で送信
-- `SpecialKeyboard.svelte`: ボタン押下で親に通知
+- `Letter.svelte`: masked/revealed/hint-revealed の表示、タップで親に通知
+- `InputField.svelte`: 入力 → 値の更新、Enter で送信（IME 変換中は送信しない）
+- `QuestionView.svelte`: 送信ボタンの有効/無効、スキップ・送信・ヒント開示の通知
+- `AnswerView.svelte`: 正解/スキップ表示、該当ポケモン一覧、Next ボタン通知、matched entry ハイライト
 - `PokedexLink.svelte`: 図鑑番号のゼロ埋め、URL 生成
 
 #### 7.1.3 統合テスト（Browser Mode、`.svelte.test.ts`）
 
-複数コンポーネントにまたがるフロー、jsdom では困難な挙動。
+複数コンポーネントにまたがるフロー（`App.svelte` を丸ごとマウントして検証）。
 
-- ダブルクリックによるヒント開示
-- フォーカス・選択状態の制御、IME 入力との相互作用
+- タップによるヒント開示
 - Enter キーでの送信フロー
-- 出題 → 解答入力 → 答え合わせ → 次の問題への状態遷移
-- 特殊文字ボタン押下 → 入力欄への文字追加
-- パスボタン押下 → 答え合わせ画面遷移
+- 未知のポケモン名でのエラー表示
+- パターン不一致でのエラー表示
+- 正解後に答え合わせ画面へ遷移
+- スキップボタン押下 → 答え合わせ画面遷移
+- Next ボタンで出題画面に戻る
 
 ### 7.2 ツール構成
 
@@ -481,7 +519,7 @@ Conventional Commits をフル採用:
 ```
 feat(quiz): add letter generation logic
 feat(data): add PokeAPI GraphQL fetcher script
-feat(ui): add special character keyboard component
+feat(ui): add hint reveal on letter tap
 fix(input): prevent Enter submission during IME
 chore(config): configure Vitest browser mode
 chore(ci): add GitHub Pages deploy workflow
