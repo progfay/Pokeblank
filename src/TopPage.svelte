@@ -8,7 +8,10 @@
       <img src="{base}logo.svg" alt="" class="logo-icon" aria-hidden="true" />
       Pokéblank
     </h1>
-    <a href="{base}endless/" class="btn btn-primary btn-lg">Endless Mode</a>
+    <div class="mode-list">
+      <a href="{base}endless/" class="btn btn-primary btn-lg">Endless Mode</a>
+      <a href="{base}timeattack/" class="btn btn-primary btn-lg">Time Attack Mode</a>
+    </div>
   </main>
   <footer class="credit">
     <p>ポケットモンスター・ポケモン・Pokémonは<a href="https://www.nintendo.co.jp/" target="_blank" rel="noopener noreferrer">任天堂</a>・<a href="http://www.creatures.co.jp/" target="_blank" rel="noopener noreferrer">クリーチャーズ</a>・<a href="http://www.gamefreak.co.jp/" target="_blank" rel="noopener noreferrer">ゲームフリーク</a>の登録商標です。</p>
@@ -29,6 +32,13 @@
 
   a.btn {
     text-decoration: none;
+  }
+
+  .mode-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    width: min(280px, 100%);
   }
 
   .logo {

@@ -55,3 +55,24 @@ export function decodeQuestion(
     },
   };
 }
+
+export const SET_SIZE = 5;
+const SET_ENCODED_LENGTH = SET_SIZE * 3;
+
+export type RestoredSet = readonly { entry: PokedexEntry; question: Question }[];
+
+export function encodeSet(items: readonly { pokedexNumber: number; question: Question }[]): string {
+  return items.map((item) => encodeQuestion(item.pokedexNumber, item.question)).join("");
+}
+
+export function decodeSet(encoded: string, pokedex: Pokedex): RestoredSet | null {
+  if (encoded.length !== SET_ENCODED_LENGTH) return null;
+  const results: { entry: PokedexEntry; question: Question }[] = [];
+  for (let i = 0; i < SET_SIZE; i++) {
+    const chunk = encoded.slice(i * 3, i * 3 + 3);
+    const decoded = decodeQuestion(chunk, pokedex);
+    if (decoded === null) return null;
+    results.push(decoded);
+  }
+  return results;
+}

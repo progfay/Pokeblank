@@ -10,6 +10,7 @@ export default defineConfig({
       input: {
         main: "index.html",
         endless: "endless/index.html",
+        timeattack: "timeattack/index.html",
       },
     },
   },
