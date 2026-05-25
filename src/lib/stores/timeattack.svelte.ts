@@ -22,6 +22,7 @@ export type PerQuestionState = {
   readonly skipped: boolean;
   readonly currentQuestion: Question;
   readonly elapsedMs: number | null;
+  readonly answeredEntry: PokedexEntry | null;
 };
 
 export type PenaltyPopup = {
@@ -87,6 +88,7 @@ export function createTimeAttackStore(pokedex: readonly PokedexEntry[]) {
       skipped: false,
       currentQuestion: it.initialQuestion,
       elapsedMs: null,
+      answeredEntry: null,
     })),
   );
   let rawInput = $state("");
@@ -202,6 +204,7 @@ export function createTimeAttackStore(pokedex: readonly PokedexEntry[]) {
         return;
       }
       error = null;
+      updatePerQuestion(currentIndex, { answeredEntry: result.matchedPokemon });
       correctAnimation = true;
       correctTimeoutId = setTimeout(() => {
         correctTimeoutId = null;
@@ -235,6 +238,7 @@ export function createTimeAttackStore(pokedex: readonly PokedexEntry[]) {
         skipped: false,
         currentQuestion: it.initialQuestion,
         elapsedMs: null,
+        answeredEntry: null,
       }));
       currentIndex = 0;
       rawInput = "";

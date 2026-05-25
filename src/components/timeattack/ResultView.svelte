@@ -122,7 +122,7 @@
           <ul class="qi-matches">
             {#each getMatchingEntries(i) as entry (entry[0])}
               <li>
-                <PokedexLink {entry} isPicked={!pq.skipped && entry[0] === q.entry[0]} />
+                <PokedexLink {entry} isPicked={pq.answeredEntry !== null && entry[0] === pq.answeredEntry[0]} />
               </li>
             {/each}
           </ul>
