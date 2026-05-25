@@ -55,17 +55,6 @@
   }
 </script>
 
-{#if canShare}
-  <button class="btn btn-ghost share-fab" onclick={handleShare} aria-label="共有">
-    <Share size={16} strokeWidth={1.5} aria-hidden="true" />
-  </button>
-{/if}
-
-<button class="btn btn-ghost retry-fab" onclick={onretry} aria-label="New Time Attack">
-  <span>New Time Attack</span>
-  <ArrowRight size={16} strokeWidth={1.5} aria-hidden="true" />
-</button>
-
 <header class="topbar">
   <h1 class="brand">
     <a href={base}>
@@ -132,6 +121,18 @@
   </ol>
 </main>
 
+<footer class="result-footer">
+  {#if canShare}
+    <button class="btn btn-ghost share-btn" onclick={handleShare} aria-label="共有">
+      <Share size={16} strokeWidth={1.5} aria-hidden="true" />
+    </button>
+  {/if}
+  <button class="btn btn-ghost retry-btn" onclick={onretry} aria-label="New Time Attack">
+    <span>New Time Attack</span>
+    <ArrowRight size={16} strokeWidth={1.5} aria-hidden="true" />
+  </button>
+</footer>
+
 {#if shareModalUrl !== null}
   <ShareModal url={shareModalUrl} onclose={() => (shareModalUrl = null)} />
 {/if}
@@ -156,7 +157,7 @@
     display: flex;
     flex-direction: column;
     padding: var(--space-5);
-    padding-bottom: calc(var(--space-4) + 44px + var(--space-3) + env(safe-area-inset-bottom, 0px));
+    padding-bottom: var(--space-5);
     gap: var(--space-5);
   }
 
@@ -302,22 +303,28 @@
     border-top: 1px solid var(--color-border);
   }
 
-  .retry-fab {
-    position: absolute;
-    right: var(--space-4);
-    bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
+  .result-footer {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    padding: var(--space-3) var(--space-4);
+    padding-bottom: calc(var(--space-3) + env(safe-area-inset-bottom, 0px));
+    background: var(--color-surface);
+    border-top: 1px solid var(--color-border);
+  }
+
+  .share-btn {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    flex-shrink: 0;
+  }
+
+  .retry-btn {
     height: 44px;
     padding: 0 var(--space-4);
     font-size: var(--text-body-size);
     font-weight: var(--font-weight-medium);
-  }
-
-  .share-fab {
-    position: absolute;
-    left: var(--space-4);
-    bottom: calc(var(--space-4) + env(safe-area-inset-bottom, 0px));
-    width: 44px;
-    height: 44px;
-    padding: 0;
+    margin-left: auto;
   }
 </style>
