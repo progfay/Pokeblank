@@ -7,9 +7,33 @@
 
   const pokedex: readonly PokedexEntry[] = pokedexData.map((name, i) => [i + 1, name] as const);
   const quiz = createQuizStore(pokedex);
+
+  let vh = $state(
+    typeof window !== 'undefined'
+      ? (window.visualViewport?.height ?? window.innerHeight)
+      : 0
+  );
+  let vvOffsetTop = $state(0);
+
+  $effect(() => {
+    const vv = window.visualViewport;
+    const update = () => {
+      vh = vv?.height ?? window.innerHeight;
+      vvOffsetTop = vv?.offsetTop ?? 0;
+    };
+    update();
+    vv?.addEventListener('resize', update);
+    vv?.addEventListener('scroll', update);
+    window.addEventListener('resize', update);
+    return () => {
+      vv?.removeEventListener('resize', update);
+      vv?.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
+  });
 </script>
 
-<div class="screen">
+<div class="screen" style={vh ? `height: ${vh}px; transform: translateY(${vvOffsetTop}px)` : undefined}>
   {#if quiz.mode === 'question'}
     <QuestionView
       question={quiz.question}
