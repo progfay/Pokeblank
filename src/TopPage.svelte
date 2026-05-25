@@ -1,11 +1,12 @@
 <script lang="ts">
+  import Logo from './components/Logo.svelte';
   const base = import.meta.env.BASE_URL;
 </script>
 
 <div class="screen">
   <main class="content">
     <h1 class="logo">
-      <img src="{base}logo.svg" alt="" class="logo-icon" aria-hidden="true" />
+      <Logo />
       Pokéblank
     </h1>
     <div class="mode-list">
@@ -51,11 +52,6 @@
     display: flex;
     align-items: center;
     gap: var(--space-3);
-  }
-
-  .logo-icon {
-    height: 1em;
-    width: auto;
   }
 
   .credit {

@@ -2,6 +2,7 @@
   import type { Question, PokedexEntry } from '../../lib/quiz/question.ts';
   import PokedexLink from './PokedexLink.svelte';
   import { Share, ArrowRight, Check } from '@lucide/svelte';
+  import Logo from '../Logo.svelte';
 
   const base = import.meta.env.BASE_URL;
 
@@ -38,7 +39,7 @@
 <header class="topbar">
   <h1 class="brand">
     <a href={base}>
-      <img src="{base}logo.svg" alt="" class="brand-icon" aria-hidden="true" />
+      <Logo />
       Pokéblank
     </a>
   </h1>
@@ -182,11 +183,6 @@
       align-items: center;
       gap: 0.4em;
     }
-  }
-
-  .brand-icon {
-    height: 1em;
-    width: auto;
   }
 
   .next-fab {
