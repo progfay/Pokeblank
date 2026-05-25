@@ -10,29 +10,9 @@
 
   const pokedex: readonly PokedexEntry[] = pokedexData.map((name, i) => [i + 1, name] as const);
   const store = createTimeAttackStore(pokedex);
-
-  let vh = $state(
-    typeof window !== 'undefined' ? (window.visualViewport?.height ?? window.innerHeight) : 0
-  );
-
-  $effect(() => {
-    const vv = window.visualViewport;
-    const update = () => {
-      vh = vv?.height ?? window.innerHeight;
-    };
-    update();
-    vv?.addEventListener('resize', update);
-    vv?.addEventListener('scroll', update);
-    window.addEventListener('resize', update);
-    return () => {
-      vv?.removeEventListener('resize', update);
-      vv?.removeEventListener('scroll', update);
-      window.removeEventListener('resize', update);
-    };
-  });
 </script>
 
-<div class="screen" style={vh ? `height: ${vh}px` : undefined}>
+<div class="screen">
   {#if store.phase === 'start'}
     <StartView onstart={() => store.handleStart()} />
   {:else if store.phase === 'playing'}
