@@ -207,15 +207,15 @@ export function createTimeAttackStore(pokedex: readonly PokedexEntry[]) {
       if (correctAnimation) return;
       const next = withRevealed(perQuestion[currentIndex].currentQuestion, letterIndex);
       updatePerQuestion(currentIndex, { currentQuestion: next, hintUsed: true });
-      penaltyTotalMs += 10_000;
-      pushPopup("+10s");
+      penaltyTotalMs += 15_000;
+      pushPopup("+15s");
     },
 
     handleSkip(): void {
       if (correctAnimation) return;
       updatePerQuestion(currentIndex, { skipped: true });
-      penaltyTotalMs += 30_000;
-      pushPopup("+30s");
+      penaltyTotalMs += 50_000;
+      pushPopup("+50s");
       advance();
     },
 
