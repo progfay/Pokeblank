@@ -18,7 +18,7 @@
     const text = `Pokéblank Time Attack\nこの 5 問でタイムを競おう\n${url}`;
     if (typeof navigator.share === 'function') {
       try {
-        await navigator.share({ title: 'Pokéblank', text, url });
+        await navigator.share({ title: 'Pokéblank', text });
       } catch {
         /* dismissed */
       }

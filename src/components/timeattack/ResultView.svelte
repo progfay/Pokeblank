@@ -39,7 +39,7 @@
     const text = `Pokéblank Time Attack: ${formatTime(finalTotalMs)}\n${url}`;
     if (typeof navigator.share === 'function') {
       try {
-        await navigator.share({ title: 'Pokéblank', text, url });
+        await navigator.share({ title: 'Pokéblank', text });
       } catch {
         /* dismissed */
       }

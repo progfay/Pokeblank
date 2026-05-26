@@ -21,7 +21,7 @@
   function handleShare() {
     const pattern = question.letters.map(l => l.kind === 'revealed' ? l.value : '◯').join('');
     const text = `このポケモンは？\n\n${pattern}\n\n${window.location.href}`;
-    navigator.share({ title: 'Pokéblank', text, url: window.location.href });
+    navigator.share({ title: 'Pokéblank', text });
   }
 </script>
 
