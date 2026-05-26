@@ -16,10 +16,9 @@
     questions: readonly SetQuestion[];
     perQuestion: readonly PerQuestionState[];
     getMatchingEntries: (index: number) => readonly PokedexEntry[];
-    onretry: () => void;
   }
 
-  let { finalTotalMs, questions, perQuestion, getMatchingEntries, onretry }: Props = $props();
+  let { finalTotalMs, questions, perQuestion, getMatchingEntries }: Props = $props();
 
   const canShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
 
@@ -127,10 +126,10 @@
       <Share size={16} strokeWidth={1.5} aria-hidden="true" />
     </button>
   {/if}
-  <button class="btn btn-ghost retry-btn" onclick={onretry} aria-label="New Game">
+  <a href="{base}timeattack/" class="btn btn-ghost retry-btn" aria-label="New Game">
     <span>New Game</span>
     <ArrowRight size={16} strokeWidth={1.5} aria-hidden="true" />
-  </button>
+  </a>
 </footer>
 
 {#if shareModalUrl !== null}
@@ -326,5 +325,6 @@
     font-size: var(--text-body-size);
     font-weight: var(--font-weight-medium);
     margin-left: auto;
+    text-decoration: none;
   }
 </style>

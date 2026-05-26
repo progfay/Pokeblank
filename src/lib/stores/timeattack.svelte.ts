@@ -100,7 +100,6 @@ export function createTimeAttackStore(pokedex: readonly PokedexEntry[]) {
   let popups = $state<readonly PenaltyPopup[]>([]);
   let popupIdCounter = 0;
   let correctAnimation = $state(false);
-  let correctTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   function advance(): void {
     const nowMs = performance.now();
@@ -117,14 +116,6 @@ export function createTimeAttackStore(pokedex: readonly PokedexEntry[]) {
     const elapsed = startTimeMs !== null ? nowMs - startTimeMs : 0;
     finalTotalMs = elapsed + penaltyTotalMs;
     phase = "result";
-  }
-
-  function clearCorrectTimeout(): void {
-    if (correctTimeoutId !== null) {
-      clearTimeout(correctTimeoutId);
-      correctTimeoutId = null;
-    }
-    correctAnimation = false;
   }
 
   function pushPopup(label: PenaltyPopup["label"]): void {
@@ -206,8 +197,7 @@ export function createTimeAttackStore(pokedex: readonly PokedexEntry[]) {
       error = null;
       updatePerQuestion(currentIndex, { answeredEntry: result.matchedPokemon });
       correctAnimation = true;
-      correctTimeoutId = setTimeout(() => {
-        correctTimeoutId = null;
+      setTimeout(() => {
         correctAnimation = false;
         advance();
       }, CORRECT_ANIMATION_MS);
@@ -227,29 +217,6 @@ export function createTimeAttackStore(pokedex: readonly PokedexEntry[]) {
       penaltyTotalMs += 30_000;
       pushPopup("+30s");
       advance();
-    },
-
-    handleRetry(): void {
-      clearCorrectTimeout();
-      const newItems = generateRandomSet(pokedex);
-      questions = newItems;
-      perQuestion = newItems.map((it) => ({
-        hintUsed: false,
-        skipped: false,
-        currentQuestion: it.initialQuestion,
-        elapsedMs: null,
-        answeredEntry: null,
-      }));
-      currentIndex = 0;
-      rawInput = "";
-      error = null;
-      startTimeMs = null;
-      currentQuestionStartMs = null;
-      penaltyTotalMs = 0;
-      finalTotalMs = 0;
-      popups = [];
-      writeUrl(newItems);
-      phase = "start";
     },
 
     dismissPopup(id: number): void {

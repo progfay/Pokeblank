@@ -66,7 +66,6 @@
       questions={store.questions}
       perQuestion={store.perQuestion}
       getMatchingEntries={(i) => store.getMatchingEntriesFor(i)}
-      onretry={() => store.handleRetry()}
     />
   {/if}
 </div>
