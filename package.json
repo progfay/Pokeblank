@@ -9,13 +9,15 @@
     "preview": "vp preview",
     "check": "vp check",
     "test": "vp test",
-    "generate:pokedex": "node scripts/fetch-pokemon.ts"
+    "generate:pokedex": "node scripts/fetch-pokemon.ts",
+    "generate:ogp": "node scripts/gen-ogp.ts"
   },
   "dependencies": {
     "@lucide/svelte": "1.16.0",
     "svelte": "5.55.7"
   },
   "devDependencies": {
+    "@resvg/resvg-js": "2.6.2",
     "@sveltejs/vite-plugin-svelte": "7.1.2",
     "@vitest/browser-playwright": "4.1.5",
     "vite-plus": "0.1.21"
