@@ -127,8 +127,8 @@
       <Share size={16} strokeWidth={1.5} aria-hidden="true" />
     </button>
   {/if}
-  <button class="btn btn-ghost retry-btn" onclick={onretry} aria-label="New Time Attack">
-    <span>New Time Attack</span>
+  <button class="btn btn-ghost retry-btn" onclick={onretry} aria-label="New Game">
+    <span>New Game</span>
     <ArrowRight size={16} strokeWidth={1.5} aria-hidden="true" />
   </button>
 </footer>
