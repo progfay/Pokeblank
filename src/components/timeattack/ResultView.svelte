@@ -36,7 +36,7 @@
 
   async function handleShare() {
     const url = window.location.href;
-    const text = `Pokéblank Time Attack: ${formatTime(finalTotalMs)}\n${url}`;
+    const text = `Pokéblank Time Attack\nRecord: ${formatTime(finalTotalMs)}\n${url}`;
     if (typeof navigator.share === 'function') {
       try {
         await navigator.share({ title: 'Pokéblank', text });
