@@ -337,7 +337,7 @@ body {
   border-radius: var(--radius-md);
   border: 1px solid var(--color-border);
   background: var(--color-surface);
-  font-size: 28px;
+  font-size: var(--tile-font-size, 28px);
   line-height: 1;
   font-weight: var(--font-weight-semibold);
   user-select: none;
@@ -367,6 +367,14 @@ body {
   border-color: var(--color-info-border);
   background: color-mix(in oklab, var(--color-info-bg) 30%, var(--color-surface));
   border-style: solid;
+}
+
+/* Small kana (拗音・促音 etc.): shrink and bottom-align so they stand out
+   from regular kana. Only applied to revealed letters — see Letter.svelte. */
+.tile-small {
+  font-size: calc(var(--tile-font-size, 28px) * 0.9);
+  align-items: flex-end;
+  padding-bottom: 14px;
 }
 
 /* ============================================================

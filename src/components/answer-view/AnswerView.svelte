@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Question, PokedexEntry } from '../../lib/quiz/question.ts';
+  import { isSmallKana } from '../../lib/text/small-kana.ts';
   import PokedexLink from './PokedexLink.svelte';
   import { Share, ArrowRight, Check } from '@lucide/svelte';
   import Logo from '../Logo.svelte';
@@ -59,9 +60,9 @@
     <div class="word">
       {#each question.letters as letter}
         {#if letter.kind === 'revealed'}
-          <span class="tile tile-shown">{letter.value}</span>
+          <span class="tile tile-shown" class:tile-small={isSmallKana(letter.value)}>{letter.value}</span>
         {:else if letter.kind === 'hint-revealed'}
-          <span class="tile tile-hint">{letter.value}</span>
+          <span class="tile tile-hint" class:tile-small={isSmallKana(letter.value)}>{letter.value}</span>
         {:else}
           <span class="tile tile-hidden" aria-hidden="true">◯</span>
         {/if}

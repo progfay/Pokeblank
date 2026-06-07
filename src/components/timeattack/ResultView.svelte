@@ -4,6 +4,7 @@
     SetQuestion,
     PerQuestionState,
   } from '../../lib/stores/timeattack.svelte.ts';
+  import { isSmallKana } from '../../lib/text/small-kana.ts';
   import PokedexLink from '../answer-view/PokedexLink.svelte';
   import ShareModal from './ShareModal.svelte';
   import { Share, ArrowRight, SkipForward, Check, ChevronDown } from '@lucide/svelte';
@@ -97,9 +98,9 @@
             <div class="qi-pattern word">
               {#each pq.currentQuestion.letters as letter}
                 {#if letter.kind === 'revealed'}
-                  <span class="tile tile-shown tile-sm">{letter.value}</span>
+                  <span class="tile tile-shown tile-sm" class:tile-small={isSmallKana(letter.value)}>{letter.value}</span>
                 {:else if letter.kind === 'hint-revealed'}
-                  <span class="tile tile-hint tile-sm">{letter.value}</span>
+                  <span class="tile tile-hint tile-sm" class:tile-small={isSmallKana(letter.value)}>{letter.value}</span>
                 {:else}
                   <span class="tile tile-hidden tile-sm" aria-hidden="true">◯</span>
                 {/if}
@@ -288,7 +289,7 @@
   .qi-pattern :global(.tile-sm) {
     min-width: 36px;
     height: 44px;
-    font-size: 22px;
+    --tile-font-size: 22px;
   }
 
   .qi-matches {
